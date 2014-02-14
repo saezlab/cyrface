@@ -90,12 +90,13 @@ public class Rserve {
 				if(rserveIsInstalled_unix()==true){
 						// start Rserve
 					startRserve_unix();
-					
+					return true;
 				}else{
 						// if Rserve is not installed yet - install it and run in afterwards
 					System.out.println("Rserve is not installed yet!");
 					installRserve_unix();
 					startRserve_unix();
+					return true;
 				}
 				
 			}else{
