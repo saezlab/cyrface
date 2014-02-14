@@ -8,8 +8,8 @@ import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.service.util.AbstractCyActivator;
 import org.osgi.framework.BundleContext;
 
-import uk.ac.ebi.cyrface3.internal.examples.dataRail.ContextMenuFactory;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailVisualStyle;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.contextMenus.ContextMenuFactory;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.menu.DataRailCyMenu;
 
 public class CyActivator extends AbstractCyActivator {

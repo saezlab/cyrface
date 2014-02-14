@@ -4,9 +4,9 @@ import org.cytoscape.app.CyAppAdapter;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CySwingApplication;
 
-import uk.ac.ebi.cyrface3.internal.examples.dataRail.ContextMenuFactory;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailVisualStyle;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.contextMenus.ContextMenuFactory;
 
 public class Storage {
 

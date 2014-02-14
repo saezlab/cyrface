@@ -17,6 +17,7 @@ import org.cytoscape.view.model.View;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 
 import uk.ac.ebi.cyrface3.internal.Storage;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.contextMenus.ContextMenuFactory;
 
 public class DataRailWorkFlow {
 	

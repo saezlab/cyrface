@@ -1,7 +1,8 @@
-package uk.ac.ebi.cyrface3.internal.examples.dataRail;
+package uk.ac.ebi.cyrface3.internal.examples.dataRail.contextMenus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -20,6 +21,10 @@ import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
 
 import uk.ac.ebi.cyrface3.internal.Storage;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailAttributes;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailModel;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailVisualStyle;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.menu.RFunctionsModel;
 
 public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
 	
@@ -128,10 +133,10 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
 						if(isPreviousStepDefined==true){
 							try {
 								
-//								File cnoListPlot = model.getRCommand().plotCnoList( RFunctionsModel.varCnoList );
-//								
-//								model.setCnoListPlot(cnoListPlot);
-//								
+								File cnoListPlot = model.getRCommand().plotCnoList( RFunctionsModel.varCnoList );
+								
+								model.setCnoListPlot(cnoListPlot);
+								
 //								new PlotsDialog(cnoListPlot); 
 								
 								network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
