@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import org.cytoscape.application.swing.AbstractCyAction;
 
 import uk.ac.ebi.cyrface3.internal.Storage;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailWorkFlow;
 
 /**
@@ -22,8 +23,8 @@ public class DataRailCyMenu extends AbstractCyAction {
 
 	public void actionPerformed(ActionEvent e) {
 		try{
-//			DataRailModel dataRailModel = new DataRailModel();
-//			storage.setDataRailModel(dataRailModel);
+			DataRailModel dataRailModel = new DataRailModel();
+			storage.setDataRailModel(dataRailModel);
 			
 			new DataRailWorkFlow(storage);
 		}catch(Exception e1){

@@ -5,6 +5,7 @@ import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CySwingApplication;
 
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.ContextMenuFactory;
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailVisualStyle;
 
 public class Storage {
@@ -15,7 +16,7 @@ public class Storage {
 	private String visualStyleName = "DataRailVisualStyle";
 	private DataRailVisualStyle dataRailVisualStyle = null;
 	private ContextMenuFactory contextMenuFactory;
-//	private DataRailModel dataRailModel;
+	private DataRailModel dataRailModel;
 	
 	private long[] workflowNodesSUIDs;
 	
@@ -27,11 +28,11 @@ public class Storage {
 		return cytoscapeDesktopService;}
 	
 // 	------------------------------------------------------------------------------------
-//	public void setDataRailModel(DataRailModel dataRailModel){
-//		this.dataRailModel = dataRailModel;}
-//	
-//	public DataRailModel getDataRailModel(){
-//		return dataRailModel;}
+	public void setDataRailModel(DataRailModel dataRailModel){
+		this.dataRailModel = dataRailModel;}
+	
+	public DataRailModel getDataRailModel(){
+		return dataRailModel;}
 	
 // 	------------------------------------------------------------------------------------
 	public void setContextMenuFactory(ContextMenuFactory contextMenuFactory){

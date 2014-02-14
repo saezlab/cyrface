@@ -3,9 +3,11 @@ package uk.ac.ebi.cyrface3.internal.examples.dataRail;
 
 import java.io.File;
 
+import uk.ac.ebi.cyrface3.internal.examples.dataRail.menu.RFunctionsModel;
+
 public class DataRailModel {
 
-//	private RFunctionsModel rCommands; // TODO
+	private RFunctionsModel rCommands; 
 	
 	// Attributes
 	private String midasFile = null;
@@ -23,17 +25,17 @@ public class DataRailModel {
 	private File optimizedMidasFile = null;
 	
 	public DataRailModel() throws Exception{
-//		this.rCommands = new RFunctionsModel(this);
+		this.rCommands = new RFunctionsModel(this);
 		this.ec50 = DataRailAttributes.ec50_default;
 		this.detection = DataRailAttributes.detection_default;
 		this.saturation = DataRailAttributes.saturation_default;
 	}
 	
 //		Getter and Setter
-//	public RFunctionsModel getRCommand() {
-//		return rCommands;
-//	}
-//	
+	public RFunctionsModel getRCommand() {
+		return rCommands;
+	}
+	
 	public String getMidasFilePath() {
 		return midasFile;
 	}

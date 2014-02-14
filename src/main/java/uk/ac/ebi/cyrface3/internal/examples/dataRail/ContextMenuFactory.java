@@ -44,7 +44,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
 		network = _appManager.getCurrentNetwork();
 		defaultNodeTable = network.getDefaultNodeTable();
 		nodeSUID = nodeView.getModel().getSUID();
-//		model = storage.getDataRailModel();
+		model = storage.getDataRailModel();
 		
 		boolean nodeIsPartOfWorkflow = false;
 		
@@ -77,7 +77,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
 						int browserReturn = fc.showOpenDialog(null);
 						if (browserReturn == JFileChooser.APPROVE_OPTION){
 							String midasFilePath = fc.getSelectedFile().getAbsolutePath();
-//							model.setMidasFilePath(midasFilePath);
+							model.setMidasFilePath(midasFilePath);
 							
 							network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
 							dataRailVisualStyle.applyVisualStyle();
@@ -99,7 +99,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
 															equals(DataRailAttributes.NODE_STATUS_DEFINED);
 						if(isPreviousStepDefined==true){
 							try {
-//								model.getRCommand().loadMidasFile(model.getMidasFilePath());
+								model.getRCommand().loadMidasFile(model.getMidasFilePath());
 								
 								network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
 								network.getDefaultNodeTable().getRow(workflowNodesSUIDs[2]).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
