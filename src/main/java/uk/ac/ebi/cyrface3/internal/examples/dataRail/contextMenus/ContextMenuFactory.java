@@ -27,7 +27,10 @@ import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailVisualStyle;
 import uk.ac.ebi.cyrface3.internal.examples.dataRail.menu.RFunctionsModel;
 
 public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
-	
+	/**
+	 * This class is used for creating the context-menus for all nodes,
+	 * but only the context-menus for the work-flow-nodes provide services.
+	 */
 	private Storage storage;
 	private long nodeSUID;
 	private CyNetworkView view;
@@ -53,9 +56,12 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory{
 		
 		boolean nodeIsPartOfWorkflow = false;
 		
+			// in this long-array are the SUIDs of the work-flow saved
 		workflowNodesSUIDs = storage.getWorkflowNodesSUIDs();
 		
+			// check, if the node-SUID of the right-click-selected node is in the array
 		for(int i=0; i<workflowNodesSUIDs.length; i++){
+				// if true: get the work-flow service for this node in the following code
 			if(workflowNodesSUIDs[i]==nodeSUID){
 				nodeIsPartOfWorkflow = true;
 				break;
