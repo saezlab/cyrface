@@ -212,7 +212,7 @@ public class Rserve {
 			input.close();
 
 				/* test, if the Rserve.exe-task is running already (it is part of the pidInfo-String).
-				 * Create it, if it´s not running */
+				 * Create it, if it is not running */
 			if(pidInfo.contains("Rserve.exe")==false){
 				System.out.println("Rserve.exe-process is not running yet");
 				return false;
