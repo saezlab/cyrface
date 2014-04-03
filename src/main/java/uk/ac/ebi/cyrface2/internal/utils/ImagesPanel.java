@@ -10,7 +10,7 @@
  *     Martijn van Iersel - Initial API
  *     Julio Saez-Rodriguez - Proposed and initiated the project
  ******************************************************************************/
-package uk.ac.ebi.cyrface3.internal.utils;
+package uk.ac.ebi.cyrface2.internal.utils;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

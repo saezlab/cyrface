@@ -1,34 +1,37 @@
-package uk.ac.ebi.cyrface3.internal.examples.dataRail.menu;
+package uk.ac.ebi.cyrface2.internal.examples.dataRail.menu;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
-import uk.ac.ebi.cyrface3.internal.examples.dataRail.DataRailModel;
-import uk.ac.ebi.cyrface3.internal.rinterface.RserveHandler;
-import uk.ac.ebi.cyrface3.internal.utils.BioconductorPackagesEnum;
+import uk.ac.ebi.cyrface2.internal.CyActivator;
+import uk.ac.ebi.cyrface2.internal.examples.dataRail.DataRailModel;
+import uk.ac.ebi.cyrface2.internal.rinterface.RserveHandler;
+import uk.ac.ebi.cyrface2.internal.utils.BioconductorPackagesEnum;
 
 public class RFunctionsModel {
 	
+	private CyActivator activator;
+	
 	private RserveHandler handler;
 	
-	// R variables names
 	public static String varCnoList = "cnolist";
 	public static String varNormCnoList = "normCnoList";
 	public static String varPknModel = "pknModel";
 	public static String varModel = "model";
 	public static String varOptResult = "result";
 	
-	public RFunctionsModel(DataRailModel model) throws Exception {
-		try {
-			this.handler = new RserveHandler();
-		} catch (Exception e) {
-			throw(e);
-		}
 	
-		try{
+	public RFunctionsModel(DataRailModel model, CyActivator activator) {
+		try {
+			this.activator = activator;
+			
+			this.handler = new RserveHandler(this.activator);
+			
 			initializePackages();
+			
 		}catch(Exception e){
-			throw(e);
+			e.printStackTrace();
+			
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package uk.ac.ebi.cyrface3.internal.examples.dataRail;
+package uk.ac.ebi.cyrface2.internal.examples.dataRail;
 
 public class DataRailAttributes {
 

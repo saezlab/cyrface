@@ -1,6 +1,6 @@
-package uk.ac.ebi.cyrface3.internal.rinterface;
+package uk.ac.ebi.cyrface2.internal.rinterface;
 
-import uk.ac.ebi.cyrface3.internal.utils.BioconductorPackagesEnum;
+import uk.ac.ebi.cyrface2.internal.utils.BioconductorPackagesEnum;
 
 public abstract class RHandler {
 
@@ -44,13 +44,6 @@ public abstract class RHandler {
 	 */
 	public abstract void installBioconductorPackage(String packageName) throws Exception;
 
-	/**
-	 * Installs Bioconductor, by running source("http://www.bioconductor.org/biocLite.R"). Required in order to install Bioconductor packages.
-	 * 
-	 * @throws Exception
-	 */
-	public abstract void installBioconductor() throws Exception;
-	
 	/**
 	 * 
 	 * Takes an R package name and verifies if the package is installed, returns True if it is, otherwise returns False. 

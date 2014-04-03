@@ -1,4 +1,4 @@
-package uk.ac.ebi.cyrface3.internal.rinterface;
+package uk.ac.ebi.cyrface2.internal.rinterface;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,7 +48,7 @@ public class Rserve {
 				while ((line = reader.readLine())!= null) {
 					output.append(line + "\n");
 						// get the R-install-path reading the information of the registry-entry
-					if(line.contains("InstallPath")&line.contains("REG_SZ")){
+					if(line.contains("InstallPath") & line.contains("REG_SZ")){
 							// erase unimportant information from the line and correct the path
 						rPath = line.substring(line.indexOf(":\\")-1).trim().replace("\\", "/");
 							// extend the path of the R-folder to the location of the R.exe-file

@@ -1,4 +1,4 @@
-package uk.ac.ebi.cyrface3.internal.utils;
+package uk.ac.ebi.cyrface2.internal.utils;
 
 public enum BioconductorPackagesEnum {
 	
@@ -10,7 +10,6 @@ public enum BioconductorPackagesEnum {
 	ANNOTATIONDBI ("AnnotationDbi"),
 	ARRAYEXPRESS ("ArrayExpress"),
 	BIOBASE ("Biobase"),
-	BIOCONDUCTOR ("BiocInstaller"),
 	BIOCGENERICS ("BiocGenerics"),
 	BIOMART ("biomaRt"),
 	BIOSTRINGS ("Biostrings"),

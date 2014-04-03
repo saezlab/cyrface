@@ -1,15 +1,14 @@
-package uk.ac.ebi.cyrface3.internal.examples.dataRail;
-
+package uk.ac.ebi.cyrface2.internal.examples.dataRail;
 
 import java.io.File;
 
-import uk.ac.ebi.cyrface3.internal.examples.dataRail.menu.RFunctionsModel;
+import uk.ac.ebi.cyrface2.internal.CyActivator;
+import uk.ac.ebi.cyrface2.internal.examples.dataRail.menu.RFunctionsModel;
 
 public class DataRailModel {
 
 	private RFunctionsModel rCommands; 
-	
-	// Attributes
+
 	private String midasFile = null;
 	private File cnoListPlot = null;
 	private File cnoListNormalisePlot = null;
@@ -24,14 +23,16 @@ public class DataRailModel {
 	
 	private File optimizedMidasFile = null;
 	
-	public DataRailModel() throws Exception{
-		this.rCommands = new RFunctionsModel(this);
+	
+	public DataRailModel (CyActivator activator) {
+		this.rCommands = new RFunctionsModel (this, activator);
 		this.ec50 = DataRailAttributes.ec50_default;
 		this.detection = DataRailAttributes.detection_default;
 		this.saturation = DataRailAttributes.saturation_default;
 	}
 	
-//		Getter and Setter
+
+	
 	public RFunctionsModel getRCommand() {
 		return rCommands;
 	}
