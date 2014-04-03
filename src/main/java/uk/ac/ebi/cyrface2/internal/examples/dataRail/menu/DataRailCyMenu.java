@@ -22,6 +22,7 @@ public class DataRailCyMenu extends AbstractCyAction {
 
 	public void actionPerformed (ActionEvent event) {
 		try{
+			
 			dataRail.start();
 			
 		}catch(Exception e){

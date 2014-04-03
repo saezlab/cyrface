@@ -53,8 +53,6 @@ public class DataRailWorkFlow {
 	public DataRailWorkFlow (CyActivator activator) {
 		this.activator = activator;
 		
-		model = new DataRailModel (activator);
-		
 		networkFactory = activator.cyAppAdapter.getCyNetworkFactory();
 		networkViewFactory = activator.cyAppAdapter.getCyNetworkViewFactory();
 		
@@ -64,7 +62,9 @@ public class DataRailWorkFlow {
 	}
 	
 	
-	public void start () {
+	public void start () throws Exception {
+		model = new DataRailModel (activator);
+		
 		createModel();
 		
 		contextMenuFactory = new ContextMenuFactory(activator, workflowNodesSUIDs, model);

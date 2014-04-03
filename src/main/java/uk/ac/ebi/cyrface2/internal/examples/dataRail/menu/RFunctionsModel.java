@@ -21,18 +21,12 @@ public class RFunctionsModel {
 	public static String varOptResult = "result";
 	
 	
-	public RFunctionsModel(DataRailModel model, CyActivator activator) {
-		try {
-			this.activator = activator;
-			
-			this.handler = new RserveHandler(this.activator);
-			
-			initializePackages();
-			
-		}catch(Exception e){
-			e.printStackTrace();
-			
-		}
+	public RFunctionsModel (DataRailModel model, CyActivator activator) throws Exception {
+		this.activator = activator;
+		
+		this.handler = new RserveHandler(this.activator);
+		
+		initializePackages();
 	}
 	
 	public void initializePackages() throws Exception{
@@ -77,8 +71,7 @@ public class RFunctionsModel {
 		return plotImg;
 	}
 	
-	// EC50, detection and saturation
-	public void normaliseCnoList(DataRailModel model) throws Exception{
+	public void normaliseCnoList (DataRailModel model) throws Exception{
 		try{
 			handler.execute(varNormCnoList + "=normaliseCNOlist(" + varCnoList + ", EC50Data=" + model.getEc50() + ", detection=" + model.getDetection() + ", saturation=" + (Double.isInfinite(model.getSaturation())? "Inf" : model.getSaturation()) + ")");
 		} catch(Exception e){

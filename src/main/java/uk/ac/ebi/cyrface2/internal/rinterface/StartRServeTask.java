@@ -7,9 +7,10 @@ import java.io.InputStreamReader;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 
-public class StartServeTask extends AbstractTask {
+public class StartRServeTask extends AbstractTask {
 
 	private TaskMonitor taskMonitor;
+	private boolean hasFinished = false; 
 	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
@@ -21,7 +22,7 @@ public class StartServeTask extends AbstractTask {
 		taskMonitor.setStatusMessage(osName);
 		taskMonitor.setProgress(0.1);
 		
-		if(osName.indexOf("win") >= 0){			
+		if (osName.indexOf("win") >= 0) {			
 			launchRserveWindows();
 
 		} else if (osName.indexOf("mac") >= 0) {
@@ -36,6 +37,8 @@ public class StartServeTask extends AbstractTask {
 		
 		taskMonitor.setStatusMessage("Cyrface ready!");
 		taskMonitor.setProgress(1.0);
+		
+		hasFinished = true;
 	}
 
 	private void launchRserveWindows () throws Exception {		
@@ -251,7 +254,7 @@ public class StartServeTask extends AbstractTask {
 	/**
 	 * This method starts Rserve in an unix-based system.
 	 */
-	private void startRserve_unix() throws Exception {
+	private boolean startRserve_unix() throws Exception {
 		String rsrvargs = "--no-save --slave";
 		String rargs = "--no-save --slave";
 		String cmd = getRInstallPath_unix();
@@ -260,7 +263,14 @@ public class StartServeTask extends AbstractTask {
 
 		Process proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "echo 'library(Rserve); Rserve(FALSE, args=\"" + rsrvargs + "\"" + ")'|" + cmd + " " + rargs});
 
-		proc.waitFor();
+		if (proc.waitFor() == 0)
+			return true;
+		else
+			return false;
+	}
+
+	public boolean hasFinished () {
+		return hasFinished;
 	}
 
 }

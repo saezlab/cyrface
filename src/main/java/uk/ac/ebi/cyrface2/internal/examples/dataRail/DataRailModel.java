@@ -24,7 +24,7 @@ public class DataRailModel {
 	private File optimizedMidasFile = null;
 	
 	
-	public DataRailModel (CyActivator activator) {
+	public DataRailModel (CyActivator activator) throws Exception {
 		this.rCommands = new RFunctionsModel (this, activator);
 		this.ec50 = DataRailAttributes.ec50_default;
 		this.detection = DataRailAttributes.detection_default;
