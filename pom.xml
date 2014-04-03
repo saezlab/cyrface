@@ -123,8 +123,7 @@
 			<version>4.2.0</version>
 		</dependency>
 		<dependency>
-<<<<<<< HEAD
-			<groupId>org.ops4j.pax.logging</groupId>
+		<groupId>org.ops4j.pax.logging</groupId>
 			<artifactId>pax-logging-api</artifactId>
 			<version>1.5.2</version>
 		</dependency>
@@ -142,21 +141,6 @@
 			<version>${cytoscape.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-=======
-	        <groupId>jsnet.rforgebml</groupId>
-	        <artifactId>Rserve</artifactId>
-	        <scope>system</scope>
-	       <version>1.8</version>
-	        <systemPath>${basedir}\lib\Rserve-1.8.jar</systemPath>
-      	</dependency>
-      		<dependency>
-	        <groupId>jsnet.rforgebml</groupId>
-	        <artifactId>REngine</artifactId>
-	        <scope>system</scope>
-	       <version>1.8</version>
-	        <systemPath>${basedir}\lib\REngine-1.8.jar</systemPath>
-      	</dependency>
->>>>>>> 3036b5eb0eb9da6ec23b9765dfd6525c89396367
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>service-api</artifactId>
@@ -223,7 +207,6 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>model-impl</artifactId>
@@ -232,8 +215,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-<<<<<<< HEAD
-			<groupId>org.cytoscape</groupId>
+		<groupId>org.cytoscape</groupId>
 			<artifactId>model-impl</artifactId>
 			<version>${cytoscape.api.version}</version>
 			<scope>test</scope>
@@ -245,215 +227,6 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-=======
-	        <groupId>jsbml</groupId>
-	        <artifactId>jsbml-qual</artifactId>
-	        <scope>system</scope>
-	        <version>2.1-b1</version>
-	        <systemPath>${basedir}\lib\jsbml-qual.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>jsbml</groupId>
-	        <artifactId>jsbml-1.0-a1-with-dependencies</artifactId>
-	        <scope>system</scope>
-	        <version>2.1-b1</version>
-	        <systemPath>${basedir}\lib\jsbml-1.0-a1-with-dependencies.jar</systemPath>
-      	</dependency>
-		<!-- 
-		the sbfc throws the same error: org.osgi.framework.BundleException: unresolved constraint in bundle 
-		uk.ac.ebi.cyrface3 [170]: Unable to resolve 170.0: missing requirement [170] package; (package=org.sbfc.api)
-		
-		<dependency>
-	        <groupId>sbfc</groupId>
-	        <artifactId>sbfc-api</artifactId>
-	        <scope>system</scope>
-	        <version>1.1.0</version>
-	        <systemPath>${basedir}\lib\sbfc-api.jar</systemPath>
-      	</dependency>
-      	 -->
-      	 
-      	 
-      	<!-- Here comes all the batik-stuff
-      	
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-awt-util</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-awt-util.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-bridge</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-bridge.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-codec</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-codec.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-css</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-css.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-dom</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-dom.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-ext</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-ext.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-extension</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-extension.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-gui-util</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-gui-util.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-gvt</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-gvt.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-parser</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-parser.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-rasterizer</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-rasterizer.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-script</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-script.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-slideshow</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-slideshow.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-squiggle</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-squiggle.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-svg-dom</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-svg-dom.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-svggen</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-svggen.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-svgpp</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-svgpp.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-swing</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-swing.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-transcoder</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-transcoder.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-ttf2svg</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-ttf2svg.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-util</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-util.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>batik</groupId>
-	        <artifactId>batik-xml</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\batik-xml.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>org.apache.lang</groupId>
-	        <artifactId>commons-io-2.4</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\commons-io-2.4.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>xml-apis</groupId>
-	        <artifactId>xml-apis</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\xml-apis.jar</systemPath>
-      	</dependency>
-      	<dependency>
-	        <groupId>xml-apis</groupId>
-	        <artifactId>commons-io-2.4</artifactId>
-	        <scope>system</scope>
-	        <version>1.7</version>
-	        <systemPath>${basedir}\lib\xml-apis-ext.jar</systemPath>
-      	</dependency>
-    	-->
-		
-		<!-- Logging -->
->>>>>>> 3036b5eb0eb9da6ec23b9765dfd6525c89396367
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>ding-presentation-impl</artifactId>
@@ -467,7 +240,6 @@
 			<version>${cytoscape.api.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>vizmap-api</artifactId>
