@@ -1,4 +1,6 @@
 .DS_Store
 .settings
+.classpath
+.project
 target/
 lib/
