@@ -14,11 +14,11 @@ public class RFunctionsModel {
 	
 	private RserveHandler handler;
 	
-	public static String varCnoList = "cnolist";
-	public static String varNormCnoList = "normCnoList";
-	public static String varPknModel = "pknModel";
-	public static String varModel = "model";
-	public static String varOptResult = "result";
+	public static String VAR_CNO_LIST = "cnolist";
+	public static String VAR_NORM_CNO_LIST= "normCnoList";
+	public static String VAR_PKN_MODEL = "pknModel";
+	public static String VAR_MODEL = "model";
+	public static String VAR_OPT_RESULT = "result";
 	
 	
 	public RFunctionsModel (DataRailModel model, CyActivator activator) throws Exception {
@@ -39,7 +39,7 @@ public class RFunctionsModel {
 	}
 	
 	public void loadMidasFile(String midasFilePath) throws Exception{
-		handler.execute(varCnoList + "=CNOlist(\"" + getWindowsCorrectPath(midasFilePath) + "\")");
+		handler.execute(VAR_CNO_LIST + "=CNOlist(\"" + getWindowsCorrectPath(midasFilePath) + "\")");
 	}
 	
 	public File plotCnoList(String varCnoList) throws Exception {
@@ -62,34 +62,34 @@ public class RFunctionsModel {
 	}
 	
 	public void normaliseCnoList (DataRailModel model) throws Exception {
-		handler.execute(varNormCnoList + "=normaliseCNOlist(" + varCnoList + ", EC50Data=" + model.getEc50() + ", detection=" + model.getDetection() + ", saturation=" + (Double.isInfinite(model.getSaturation())? "Inf" : model.getSaturation()) + ")");
+		handler.execute(VAR_NORM_CNO_LIST + "=normaliseCNOlist(" + VAR_CNO_LIST + ", EC50Data=" + model.getEc50() + ", detection=" + model.getDetection() + ", saturation=" + (Double.isInfinite(model.getSaturation())? "Inf" : model.getSaturation()) + ")");
 	}
 	
 	public void writeNormalizedMIDAS(String file) throws Exception {
-		handler.execute("writeMIDAS("+varNormCnoList+",\""+getWindowsCorrectPath(file)+"\")");
+		handler.execute("writeMIDAS("+VAR_NORM_CNO_LIST+",\""+getWindowsCorrectPath(file)+"\")");
 	}
 	
 	public void writeOptimizedMIDAS(String file) throws Exception {
-		handler.execute("writeMIDAS("+varNormCnoList+",\""+getWindowsCorrectPath(file)+"\")");
+		handler.execute("writeMIDAS("+VAR_NORM_CNO_LIST+",\""+getWindowsCorrectPath(file)+"\")");
 	}
 	
 	public void optmise(String pknModelFile) throws Exception {
-		handler.execute(varPknModel + "=readSIF(\"" + getWindowsCorrectPath(pknModelFile) + "\")");
+		handler.execute(VAR_PKN_MODEL + "=readSIF(\"" + getWindowsCorrectPath(pknModelFile) + "\")");
 		
-		handler.execute(varModel + "=preprocessing(" + varNormCnoList + "," + varPknModel + ")");
+		handler.execute(VAR_MODEL + "=preprocessing(" + VAR_NORM_CNO_LIST + "," + VAR_PKN_MODEL + ")");
 		
-		handler.execute(varOptResult + "=gaBinaryT1(" + varNormCnoList + "," + varModel + ",verbose=FALSE)");
+		handler.execute(VAR_OPT_RESULT + "=gaBinaryT1(" + VAR_NORM_CNO_LIST + "," + VAR_MODEL + ",verbose=FALSE)");
 	}
 	
 	public File cutAndPlot() throws Exception {
 		File plotImg = null;
 
-		handler.execute("try(png(filename='"+ varOptResult +".png'))");
-		handler.execute("cutAndPlot(" + varNormCnoList + "," + varModel + ",list(" + varOptResult + "$bString))");
+		handler.execute("try(svg(filename='"+ VAR_OPT_RESULT +".svg'))");
+		handler.execute("cutAndPlot(" + VAR_NORM_CNO_LIST + "," + VAR_MODEL + ",list(" + VAR_OPT_RESULT + "$bString))");
 		handler.execute("dev.off()");
-		byte[] plot = handler.executeReceiveBytes("r=readBin('"+ varOptResult +".png','raw',1024*1024); unlink('"+ varOptResult +".png'); r");
+		byte[] plot = handler.executeReceiveBytes("r=readBin('"+ VAR_OPT_RESULT +".svg','raw',1024*1024); unlink('"+ VAR_OPT_RESULT +".svg'); r");
 
-		plotImg = File.createTempFile("CnoListPlot", ".png");
+		plotImg = File.createTempFile("CnoListPlot", ".svg");
 		FileOutputStream fos = new FileOutputStream(plotImg);
 
 		fos.write( plot );

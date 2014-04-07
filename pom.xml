@@ -187,17 +187,50 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>net.rforge</groupId>
 			<artifactId>Rserve</artifactId>
 			<version>1.8</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>net.rforge</groupId>
 			<artifactId>REngine</artifactId>
 			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-all</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>xml-apis</groupId>
+    		<artifactId>xml-apis-ext</artifactId>
+    		<version>1.3.04</version>
+		</dependency>
+		<dependency>
+    		<groupId>xml-apis</groupId>
+    		<artifactId>xml-apis</artifactId>
+    		<version>1.3.04</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jsbml</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jsbmlqual</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>sbfc</artifactId>
+			<version>0.1</version>
 		</dependency>
 
 		<!-- Testing -->

@@ -26,9 +26,9 @@ public class DataRailModel {
 	
 	public DataRailModel (CyActivator activator) throws Exception {
 		this.rCommands = new RFunctionsModel (this, activator);
-		this.ec50 = DataRailAttributes.ec50_default;
-		this.detection = DataRailAttributes.detection_default;
-		this.saturation = DataRailAttributes.saturation_default;
+		this.ec50 = DataRailAttributes.EC50_DEFAULT;
+		this.detection = DataRailAttributes.DETECTION_DEFAULT;
+		this.saturation = DataRailAttributes.SATURATION_DEFAULT;
 	}
 	
 

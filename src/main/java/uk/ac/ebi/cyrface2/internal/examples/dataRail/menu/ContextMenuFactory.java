@@ -19,17 +19,18 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
+import org.cytoscape.work.TaskIterator;
 
 import uk.ac.ebi.cyrface2.internal.CyActivator;
 import uk.ac.ebi.cyrface2.internal.examples.dataRail.DataRailAttributes;
 import uk.ac.ebi.cyrface2.internal.examples.dataRail.DataRailModel;
-import uk.ac.ebi.cyrface2.internal.examples.dataRail.DataRailVisualStyle;
+import uk.ac.ebi.cyrface2.internal.examples.dataRail.tasks.NormaliseCnoListTask;
+import uk.ac.ebi.cyrface2.internal.examples.dataRail.tasks.OptimiseCnoListTask;
+import uk.ac.ebi.cyrface2.internal.utils.PlotsDialog;
 
 public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	
-	private CyActivator activator;
-	
-	private DataRailVisualStyle dataRailVisualStyle;
+	private CyActivator activator;	
 	private DataRailModel model;
 	
 	private CyNetworkView view;
@@ -38,7 +39,8 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	
 	private List<Long> workflowNodesSUIDs;
 	
-	public ContextMenuFactory(CyActivator activator, List<Long> workflowNodesSUIDs, DataRailModel model) {
+	
+	public ContextMenuFactory (CyActivator activator, List<Long> workflowNodesSUIDs, DataRailModel model) {
 		this.activator = activator;
 		this.model = model;
 		this.workflowNodesSUIDs = workflowNodesSUIDs;
@@ -59,11 +61,11 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 			case 1: 
 				menuItem = createLoadMidasMenu(nodeSUID); break;
 			case 2: 
-				menuItem = createCNOListMenu(nodeSUID); break;
+				menuItem = createPlotCNOListMenu(nodeSUID); break;
 			case 3: 
 				menuItem = createNormaliseMenu(nodeSUID); break;
 			case 4: 
-				menuItem = createCNOListNormalisedMenu(nodeSUID); break;
+				menuItem = createPlotNormalisedCNOListMenu(nodeSUID); break;
 			case 5: 
 				menuItem = createOptimiseMenu(nodeSUID); break;
 			case 6: 
@@ -75,142 +77,278 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 		return menuItem;
 	}
 	
+	/**
+	 * Set Midas File node context menu
+	 * 
+	 * @param nodeSUID
+	 * @return
+	 */
 	private CyMenuItem createBrowseMidasMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Set MIDAS-file ...");
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.SET_MIDAS_CONTEXT_MENU_NAME);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				JFileChooser fc = new JFileChooser(); 
-				FileFilter filter = new FileNameExtensionFilter("csv-files", "csv");
-				fc.addChoosableFileFilter(filter);
-				fc.setFileFilter(filter);
-				int browserReturn = fc.showOpenDialog(null);
-				if (browserReturn == JFileChooser.APPROVE_OPTION){
-					String midasFilePath = fc.getSelectedFile().getAbsolutePath();
-					model.setMidasFilePath(midasFilePath);
-					
-					network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
-					dataRailVisualStyle.applyVisualStyle();
-					view.updateView();
-				}
+				browseMidasMenuFunction(nodeSUID);
 			}
 		});
-		menuItem.setToolTipText("Browse the input MIDAS file.");
+		menuItem.setToolTipText(DataRailAttributes.SET_MIDAS_CONTEXT_MENU_TOOL_TIP);
 		return new CyMenuItem(menuItem, 0);
 	}
 	
+	/**
+	 * Set Midas File context menu function
+	 * 
+	 * @param nodeSUID
+	 */
+	private void browseMidasMenuFunction (final long nodeSUID) {
+		JFileChooser fc = new JFileChooser();
+		FileFilter filter = new FileNameExtensionFilter("csv-files", "csv");
+		fc.addChoosableFileFilter(filter);
+		fc.setFileFilter(filter);
+		
+		int browserReturn = fc.showOpenDialog(null);
+		
+		if (browserReturn == JFileChooser.APPROVE_OPTION){
+			String midasFilePath = fc.getSelectedFile().getAbsolutePath();
+			model.setMidasFilePath(midasFilePath);
+			
+			network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+			view.updateView();
+		}
+	}
+	
+	/**
+	 * Load Midas context menu
+	 * 
+	 * @param nodeSUID
+	 * @return
+	 */
 	private CyMenuItem createLoadMidasMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Load MIDAS ...");
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.LOAD_MIDAS_CONTEXT_MENU_NAME);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				CyRow step1Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(0));
-				boolean isPreviousStepDefined = step1Row.get(DataRailAttributes.NODE_STATUS, String.class).
-													equals(DataRailAttributes.NODE_STATUS_DEFINED);
-				if (isPreviousStepDefined) {
-					try {
-						model.getRCommand().loadMidasFile(model.getMidasFilePath());
-						
-						network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
-						network.getDefaultNodeTable().getRow(workflowNodesSUIDs.get(2)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
-						view.updateView();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					
-				}else{
-					JOptionPane.showMessageDialog(null, "<HTML>Please set the path to the MIDAS-File in the context<br />"
-							+ "menu of the first node named \"MIDAS\" first.<HTML />");
-				}
+				loadMidasFunction(nodeSUID);
 			}
 		});
 		
-		menuItem.setToolTipText("Loads MIDAS file converting it into a CNO list.");
+		menuItem.setToolTipText(DataRailAttributes.LOAD_MIDAS_CONTEXT_MENU_TOOL_TIP);
 		return new CyMenuItem(menuItem, 0);
 	}
 	
-	private CyMenuItem createCNOListMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Plot MIDAS ...");
+	/**
+	 * Load Midas menu function
+	 * 
+	 * @param nodeSUID
+	 */
+	private void loadMidasFunction (final long nodeSUID) {
+		try {
+			CyRow step1Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(0));
+			boolean isPreviousStepDefined = step1Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
+			
+			if (isPreviousStepDefined) {
+				model.getRCommand().loadMidasFile(model.getMidasFilePath());
+
+				network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+				network.getDefaultNodeTable().getRow(workflowNodesSUIDs.get(2)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+				view.updateView();
+
+			}else{
+				JOptionPane.showMessageDialog(null, DataRailAttributes.LOAD_MIDAS_ERROR_MESSAGE);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * CNO list Context Menu 
+	 * 
+	 * @param nodeSUID
+	 * @return
+	 */
+	private CyMenuItem createPlotCNOListMenu (final long nodeSUID) {
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.CNO_LIST_CONTEXT_MENU_NAME);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CyRow step2Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(1));
-				boolean isPreviousStepDefined = step2Row.get(DataRailAttributes.NODE_STATUS, String.class).
-													equals(DataRailAttributes.NODE_STATUS_DEFINED);
-				if(isPreviousStepDefined==true){
-					try {
-						
-						File cnoListPlot = model.getRCommand().plotCnoList( RFunctionsModel.varCnoList );
-						
-						model.setCnoListPlot(cnoListPlot);
-						
-//						new PlotsDialog(cnoListPlot); 
-						
-						network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
-						view.updateView();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					
-				}else{
-					JOptionPane.showMessageDialog(null, "<HTML>Please make sure, that the MIDAS-file is loaded using<br />"
-							+ "the menu of the second node named \"load MIDAS\" first.<HTML />");
-				}
+				plotCNOListFunction(nodeSUID);
 			}
 		});
-		menuItem.setToolTipText("Plot the MIDAS.");
+		menuItem.setToolTipText(DataRailAttributes.CNO_LIST_CONTEXT_MENU_TOOL_TIP);
 		return new CyMenuItem(menuItem, 0);
 	}
+
+	/** CNO List menu function
+	 * 
+	 * @param nodeSUID
+	 */
+	private void plotCNOListFunction (final long nodeSUID) {
+		try {
+			CyRow step2Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(1));
+			boolean isPreviousStepDefined = step2Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
+
+			if (isPreviousStepDefined) {
+				File cnoListPlot = model.getRCommand().plotCnoList(RFunctionsModel.VAR_CNO_LIST);
+				model.setCnoListPlot(cnoListPlot);
+
+				PlotsDialog panel = new PlotsDialog(cnoListPlot);
+				panel.display();
+
+				network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+				view.updateView();
+
+			}else{
+				JOptionPane.showMessageDialog(null, DataRailAttributes.CNO_LIST_ERROR_MESSAGE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * Normalise CNO list context menu
+	 * 
+	 * @param nodeSUID
+	 * @return
+	 */
 	private CyMenuItem createNormaliseMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Normalize MIDAS ...");
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.NORMALISE_CNO_CONTEXT_MENU_NAME);
+		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
-				JOptionPane.showMessageDialog(null, "MyNodeViewContextMenuFactory action worked.");
+				CyRow step3Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(2));
+				boolean isPreviousStepDefined = step3Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 				
+				if (isPreviousStepDefined) {
+					activator.dialogTaskManager.execute(new TaskIterator(new NormaliseCnoListTask(model, workflowNodesSUIDs, defaultNodeTable, network, view)));
+				}
 			}
 		});
 		
-		menuItem.setToolTipText("Normalize the MIDAS.");
+		menuItem.setToolTipText(DataRailAttributes.NORMALISE_CNO_CONTEXT_MENU_TOOL_TIP);
 		return new CyMenuItem(menuItem, 0);
 	}
 	
-	private CyMenuItem createCNOListNormalisedMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Plot MIDAS ...");
+	
+	/**
+	 * CNO List Normalised context menu
+	 * 
+	 * @param nodeSUID
+	 * @return
+	 */
+	private CyMenuItem createPlotNormalisedCNOListMenu (final long nodeSUID) {
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.NORMALISED_CNO_CONTEXT_MENU_NAME);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
-				JOptionPane.showMessageDialog(null, "MyNodeViewContextMenuFactory action worked.");
-				
+				plotNormalisedCNOList (nodeSUID);
 			}
 		});
-		menuItem.setToolTipText("Plot the MIDAS.");
+		menuItem.setToolTipText(DataRailAttributes.NORMALISED_CNO_CONTEXT_MENU_TOOL_TIP);
 		return new CyMenuItem(menuItem, 0);
 	}
 	
+	/**
+	 * CNO List Normalized menu function
+	 * 
+	 * @param nodeSUID
+	 */
+	private void plotNormalisedCNOList (final long nodeSUID) {
+		try {
+			CyRow step4Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(3));
+			boolean isPreviousStepDefined = step4Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
+
+			if (isPreviousStepDefined) {
+				File cnoListPlot = model.getRCommand().plotCnoList(RFunctionsModel.VAR_NORM_CNO_LIST);
+				model.setCnoListPlot(cnoListPlot);
+
+				PlotsDialog panel = new PlotsDialog(cnoListPlot);
+				panel.display();
+			}else{
+				JOptionPane.showMessageDialog(null, DataRailAttributes.CNO_LIST_ERROR_MESSAGE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Optimize CNO
+	 * 
+	 * @param nodeSUID
+	 * @return
+	 */
 	private CyMenuItem createOptimiseMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Optimize ...");
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.OPTMISE_CONTEXT_MENU_NAME);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
-				JOptionPane.showMessageDialog(null, "MyNodeViewContextMenuFactory action worked.");
-				
+				optimiseFunction(nodeSUID);
 			}
 		});
-		menuItem.setToolTipText("Optimize the MIDAS.");
+		menuItem.setToolTipText(DataRailAttributes.OPTMISE_CONTEXT_MENU_TOOL_TIP);
 		return new CyMenuItem(menuItem, 0);
 	}
 	
+	/**
+	 * Optimize menu function
+	 * 
+	 * @param nodeSUID
+	 */
+	public void optimiseFunction (final long nodeSUID) {
+		CyRow step5Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(4));
+		boolean isPreviousStepDefined = step5Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
+
+		if (isPreviousStepDefined) {
+			JFileChooser fc = new JFileChooser();
+			FileFilter filter = new FileNameExtensionFilter("sif or sbml", "sif", "sbml", "xml");
+			fc.addChoosableFileFilter(filter);
+			fc.setFileFilter(filter);
+			
+			int browserReturn = fc.showOpenDialog(null);
+			
+			if (browserReturn == JFileChooser.APPROVE_OPTION){
+				model.setPknModelFile(fc.getSelectedFile().getAbsolutePath());
+				activator.dialogTaskManager.execute(new TaskIterator(new OptimiseCnoListTask(model, workflowNodesSUIDs, defaultNodeTable, network, view)));
+			}
+		}
+	}
+	
+	/**
+	 * Plot Optmised CNO list menu
+	 * @param nodeSUID
+	 * @return
+	 */
 	private CyMenuItem createOptimisedCNOListMenu (final long nodeSUID) {
-		JMenuItem menuItem = new JMenuItem("Plot MIDAS ...");
+		JMenuItem menuItem = new JMenuItem(DataRailAttributes.PLOT_OPTIMISED_CONTEXT_MENU_NAME);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
-				JOptionPane.showMessageDialog(null, "MyNodeViewContextMenuFactory action worked.");
+				plotOptimisedFunction (nodeSUID);
 				
 			}
 		});
-		menuItem.setToolTipText("Plot optimized CNO-list."); 
+		menuItem.setToolTipText(DataRailAttributes.PLOT_OPMITSED_CONTEXT_MENU_TOOL_TIP); 
 		return new CyMenuItem(menuItem, 0);
+	}
+	
+	/**
+	 * Plot Optmised CNO list menu function
+	 * 
+	 * @param nodeSUID
+	 */
+	private void plotOptimisedFunction (final long nodeSUID) {
+		try {
+			CyRow step6Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(5));
+			boolean isPreviousStepDefined = step6Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
+
+			if (isPreviousStepDefined) {
+				File cnoListPlot = model.getRCommand().cutAndPlot();
+				model.setCnoListOptimisedPlot(cnoListPlot);
+
+				PlotsDialog panel = new PlotsDialog(cnoListPlot);
+				panel.display();
+			} else {
+				JOptionPane.showMessageDialog(null, DataRailAttributes.CNO_LIST_ERROR_MESSAGE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
