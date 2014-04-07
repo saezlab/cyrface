@@ -49,7 +49,7 @@ public class PlotsDialog extends JDialog{
 		// Configure Menu Bar 
 		menuBar = new JMenuBar();
 
-		fileMenu = new JMenu("File");
+		fileMenu = new JMenu(Attributes.FILE_MENU_NAME.text);
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(fileMenu);
 
@@ -64,16 +64,17 @@ public class PlotsDialog extends JDialog{
 		JMenuItem closeMenu = initFileCloseMenu();
 		fileMenu.add(closeMenu);
 
-		if( FilenameUtils.getExtension(plotFile.getName()).toUpperCase().equals("SVG") ){
+		if (FilenameUtils.getExtension(plotFile.getName()).toUpperCase().equals("SVG")) {
 			SVGPlots svgPlot = new SVGPlots(plotFile);
 			plotPanel = new JPanel(true);
 			plotPanel.setLayout(new BorderLayout());
 			plotPanel.add(svgPlot.createPlotPanel(), BorderLayout.CENTER);
-		}else{
+		
+		} else {
 			Image plotImage = getPlotAsImage();
-			if( plotImage!=null ){
+			
+			if (plotImage != null) 
 				plotPanel = new ImagesPanel(plotImage);
-			}
 		}
 
 		menuBar.revalidate();
@@ -104,75 +105,79 @@ public class PlotsDialog extends JDialog{
 	}
 
 	private JMenuItem initFileSavePlotMenu() {
-		JMenuItem savePlotMenu = new JMenuItem("Save R plot...");
+		JMenuItem savePlotMenu = new JMenuItem(Attributes.SAVE_R_PLOT_MENU_NAME.text);
 		savePlotMenu.setMnemonic(KeyEvent.VK_S);
 
 		savePlotMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try{
-					JFileChooser fc = new JFileChooser();
-					fc.setDialogTitle("Save R Plot");
-					
-					int browserReturn = fc.showSaveDialog(null);
-					String savePath = "";
-							
-					if (browserReturn == JFileChooser.APPROVE_OPTION){
-						savePath = fc.getSelectedFile().getAbsolutePath();
-						if(!(fc.getSelectedFile().getName().toLowerCase().endsWith(".svg"))){
-							savePath = savePath+".png";
-						}
-						File destinationFile = new File(plotFile, savePath);
-						
-						FileUtils.copyFile(plotFile, destinationFile);
-					}
-				}catch(Exception e){
-					e.printStackTrace();
-				}
+				savePlot();
 			}
 		});
-		// TODO must be tested
-
 		return savePlotMenu;
 	}
 	
+	private void savePlot () {
+		try{
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle(Attributes.SAVE_R_PLOT_MENU_NAME.text);
+			
+			int browserReturn = fc.showSaveDialog(null);
+			String savePath = "";
+					
+			if (browserReturn == JFileChooser.APPROVE_OPTION){
+				savePath = fc.getSelectedFile().getAbsolutePath();
+				
+				savePath = savePath + "r_plot" + ".png";
+				
+				File destinationFile = new File(savePath);
+				
+				FileUtils.copyFile(plotFile, destinationFile);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private JMenuItem initFileSaveMIDASMenu() {
-		JMenuItem saveMIDASMenu = new JMenuItem("Save MIDAS file...");
+		JMenuItem saveMIDASMenu = new JMenuItem(Attributes.SAVE_MIDAS_FILE_MENU_NAME.text);
 		saveMIDASMenu.setMnemonic(KeyEvent.VK_S);
 
 		saveMIDASMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				try{
-					JFileChooser fc = new JFileChooser();
-					fc.setDialogTitle("Save R Plot");
-					
-					int browserReturn = fc.showSaveDialog(null);
-					String savePath = "";
-							
-					if (browserReturn == JFileChooser.APPROVE_OPTION){
-						savePath = fc.getSelectedFile().getAbsolutePath();
-						if(!(fc.getSelectedFile().getName().toLowerCase().endsWith(".csv"))){
-							savePath = savePath+".csv";
-						}
-						File destinationFile = new File(midasFile, savePath);
-						
-						FileUtils.copyFile(midasFile, destinationFile);
-					}
-				}catch(Exception e){
-					e.printStackTrace();
-				}
 			}
 		});
 		
-		if(midasFile==null)
-			saveMIDASMenu.setEnabled(false);
+		if (midasFile == null) saveMIDASMenu.setEnabled(false);
 
 		return saveMIDASMenu;
 	}
 	
+	public void saveMidas () {
+		try{
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle(Attributes.SAVE_R_PLOT_MENU_NAME.text);
+			
+			int browserReturn = fc.showSaveDialog(null);
+			String savePath = "";
+					
+			if (browserReturn == JFileChooser.APPROVE_OPTION){
+				savePath = fc.getSelectedFile().getAbsolutePath();
+				
+				if (!(fc.getSelectedFile().getName().toLowerCase().endsWith(".csv")))
+					savePath = savePath + ".csv";
+				
+				File destinationFile = new File(midasFile, savePath);
+				
+				FileUtils.copyFile(midasFile, destinationFile);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private JMenuItem initFileCloseMenu() {
-		JMenuItem closeMenu = new JMenuItem("Close");
+		JMenuItem closeMenu = new JMenuItem(Attributes.CLOSE_MENU_NAME.text);
 
 		closeMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -181,6 +186,19 @@ public class PlotsDialog extends JDialog{
 		});
 
 		return closeMenu;
+	}
+	
+	public enum Attributes {
+		CLOSE_MENU_NAME("Close"),
+		SAVE_R_PLOT_MENU_NAME("Save R plot"),
+		SAVE_MIDAS_FILE_MENU_NAME("Save MIDAS file..."),
+		FILE_MENU_NAME("File");
+		
+		public String text;
+		
+		private Attributes(String text) {
+			this.text = text;
+		}
 	}
 
 }
