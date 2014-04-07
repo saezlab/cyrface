@@ -10,7 +10,6 @@ import org.cytoscape.work.TaskMonitor;
 public class StartRServeTask extends AbstractTask {
 
 	private TaskMonitor taskMonitor;
-	private boolean hasFinished = false; 
 	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
@@ -24,10 +23,10 @@ public class StartRServeTask extends AbstractTask {
 		
 		if (osName.indexOf("win") >= 0) {			
 			launchRserveWindows();
-
+	
 		} else if (osName.indexOf("mac") >= 0) {
 			launchRserveUnix();
-
+	
 		} else if (osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0 ) {
 			launchRserveUnix();
 			
@@ -37,8 +36,6 @@ public class StartRServeTask extends AbstractTask {
 		
 		taskMonitor.setStatusMessage("Cyrface ready!");
 		taskMonitor.setProgress(1.0);
-		
-		hasFinished = true;
 	}
 
 	private void launchRserveWindows () throws Exception {		
@@ -78,7 +75,7 @@ public class StartRServeTask extends AbstractTask {
 		if (!rserveIsInstalled_win(rPath)) installRserve_win(rPath);
 
 		// Check if Rserve is running
-		if (!isRserveProcessRunning_win()) startRserve_win(rPath);
+		startRserve_win(rPath);
 
 	}
 
@@ -144,34 +141,6 @@ public class StartRServeTask extends AbstractTask {
 
 		Process proc = Runtime.getRuntime().exec(installPath+" -e \"library(Rserve)" + ";Rserve(FALSE,args='" + rsrvargs + "')\" " + rargs);
 		proc.waitFor();
-	}
-
-
-	/**
-	 * This method checks, if the Rserve.exe is running. (for windows)
-	 */
-	private boolean isRserveProcessRunning_win() throws Exception {
-		String line;
-		String pidInfo ="";
-
-		// Get all tasks from the task-list
-		Process p =Runtime.getRuntime().exec(System.getenv("windir") + "\\system32\\" + "tasklist.exe");
-
-		BufferedReader input =  new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-		while ((line = input.readLine()) != null) {
-			pidInfo+=line; 
-		}
-
-		input.close();
-
-		/* test, if the Rserve.exe-task is running already (it is part of the pidInfo-String).
-		 * Create it if it is not running */
-		if (pidInfo.contains("Rserve.exe")){
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 
@@ -255,22 +224,18 @@ public class StartRServeTask extends AbstractTask {
 	 * This method starts Rserve in an unix-based system.
 	 */
 	private boolean startRserve_unix() throws Exception {
-		String rsrvargs = "--no-save --slave";
+		String rsrvargs = "--vanilla"; // --no-save --slave
 		String rargs = "--no-save --slave";
 		String cmd = getRInstallPath_unix();
 
 		if (cmd == null) throw new Exception("R install path not found");
 
-		Process proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "echo 'library(Rserve); Rserve(FALSE, args=\"" + rsrvargs + "\"" + ")'|" + cmd + " " + rargs});
+		Process proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "echo 'library(Rserve); Rserve(args=\"" + rsrvargs + "\"" + ")'|" + cmd + " " + rargs});
 
 		if (proc.waitFor() == 0)
 			return true;
 		else
 			return false;
 	}
-
-	public boolean hasFinished () {
-		return hasFinished;
-	}
-
+	
 }

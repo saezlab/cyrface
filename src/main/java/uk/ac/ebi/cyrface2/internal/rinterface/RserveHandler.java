@@ -8,7 +8,7 @@ import uk.ac.ebi.cyrface2.internal.CyActivator;
 import uk.ac.ebi.cyrface2.internal.utils.BioconductorPackagesEnum;
 import uk.ac.ebi.cyrface2.internal.utils.Rutils;
 
-public class RserveHandler extends RHandler{
+public class RserveHandler extends RHandler {
 
 	private static RConnection connection = null;
 	private CyActivator activator;
@@ -22,20 +22,19 @@ public class RserveHandler extends RHandler{
 		establishConnection();
 	}
 
-	public void closeConnection() throws Exception {
+	public void closeConnection () throws Exception {
 		if (connection == null) {
 			connection.close();
 			connection = null;
 		}
 	}
 
-	public synchronized void establishConnection() throws Exception {
-		StartRServeTask task = new StartRServeTask();
-		activator.dialogTaskManager.execute(new TaskIterator(task));
+	private void establishConnection() throws Exception {
+		if (!isRserveRunning()) {
+			activator.synchronousTaskManager.execute(new TaskIterator(new StartRServeTask()));
+		}
 		
-		while (!task.hasFinished()) wait(500);
-		
-		if( connection == null ){
+		if (connection == null) {
 			connection = new RConnection();
 		}
 	}
@@ -163,6 +162,16 @@ public class RserveHandler extends RHandler{
 
 	public boolean isConnectionEstablished(){
 		return connection == null ? false : true;
+	}
+	
+	public boolean isRserveRunning () {
+		try {
+			RConnection connection = new RConnection();
+			connection.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

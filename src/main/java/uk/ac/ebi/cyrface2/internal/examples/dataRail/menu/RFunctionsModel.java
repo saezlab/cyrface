@@ -24,114 +24,83 @@ public class RFunctionsModel {
 	public RFunctionsModel (DataRailModel model, CyActivator activator) throws Exception {
 		this.activator = activator;
 		
-		this.handler = new RserveHandler(this.activator);
+		this.handler = new RserveHandler(activator);
 		
 		initializePackages();
 	}
 	
-	public void initializePackages() throws Exception{
-		try{
+	public void initializePackages() throws Exception {
+		if (handler.isConnectionEstablished()) {
 			handler.installBioconductorPackage(BioconductorPackagesEnum.RBGL);
 			handler.installBioconductorPackage(BioconductorPackagesEnum.CELLNOPTR);
-			
+		
 			handler.libraryPackage(BioconductorPackagesEnum.CELLNOPTR);
-		}catch(Exception e){
-			throw(e);
 		}
 	}
 	
 	public void loadMidasFile(String midasFilePath) throws Exception{
-		try{
-			handler.execute(varCnoList + "=CNOlist(\"" + getWindowsCorrectPath(midasFilePath) + "\")");
-		} catch(Exception e){
-			throw(e);
-		}
+		handler.execute(varCnoList + "=CNOlist(\"" + getWindowsCorrectPath(midasFilePath) + "\")");
 	}
 	
-	public File plotCnoList(String varCnoList) throws Exception{
+	public File plotCnoList(String varCnoList) throws Exception {
 		File plotImg = null;
 
-		try{
-			handler.execute("try(svg(filename='" + varCnoList + ".svg'))");
-			handler.execute("plotCNOlist(" + varCnoList + ")");
-			handler.execute("dev.off()");
-			byte[] plot = handler.executeReceiveBytes("r=readBin('" + varCnoList + ".svg','raw',1024*1024); unlink('" + varCnoList +".svg'); r");
+		handler.execute("try(svg(filename='" + varCnoList + ".svg'))");
+		handler.execute("plotCNOlist(" + varCnoList + ")");
+		handler.execute("dev.off()");
+		byte[] plot = handler.executeReceiveBytes("r=readBin('" + varCnoList + ".svg','raw',1024*1024); unlink('" + varCnoList +".svg'); r");
 
-			plotImg = File.createTempFile(varCnoList, ".svg");
-			FileOutputStream fos = new FileOutputStream(plotImg);
+		plotImg = File.createTempFile(varCnoList, ".svg");
+		FileOutputStream fos = new FileOutputStream(plotImg);
 
-			fos.write( plot );
+		fos.write(plot);
 
-			fos.flush();
-			fos.close();
-		} catch(Exception e){
-			throw(e);
-		}
-		
+		fos.flush();
+		fos.close();
+			
 		return plotImg;
 	}
 	
-	public void normaliseCnoList (DataRailModel model) throws Exception{
-		try{
-			handler.execute(varNormCnoList + "=normaliseCNOlist(" + varCnoList + ", EC50Data=" + model.getEc50() + ", detection=" + model.getDetection() + ", saturation=" + (Double.isInfinite(model.getSaturation())? "Inf" : model.getSaturation()) + ")");
-		} catch(Exception e){
-			throw(e);
-		}
+	public void normaliseCnoList (DataRailModel model) throws Exception {
+		handler.execute(varNormCnoList + "=normaliseCNOlist(" + varCnoList + ", EC50Data=" + model.getEc50() + ", detection=" + model.getDetection() + ", saturation=" + (Double.isInfinite(model.getSaturation())? "Inf" : model.getSaturation()) + ")");
 	}
 	
-	public void writeNormalizedMIDAS(String file) throws Exception{
-		try{
-			handler.execute("writeMIDAS("+varNormCnoList+",\""+getWindowsCorrectPath(file)+"\")");
-		} catch(Exception e){
-			throw(e);
-		}
+	public void writeNormalizedMIDAS(String file) throws Exception {
+		handler.execute("writeMIDAS("+varNormCnoList+",\""+getWindowsCorrectPath(file)+"\")");
 	}
 	
-	public void writeOptimizedMIDAS(String file) throws Exception{
-		try{
-			handler.execute("writeMIDAS("+varNormCnoList+",\""+getWindowsCorrectPath(file)+"\")");
-		} catch(Exception e){
-			throw(e);
-		}
+	public void writeOptimizedMIDAS(String file) throws Exception {
+		handler.execute("writeMIDAS("+varNormCnoList+",\""+getWindowsCorrectPath(file)+"\")");
 	}
 	
-	public void optmise(String pknModelFile) throws Exception{
-		try{
-			handler.execute(varPknModel + "=readSIF(\"" + getWindowsCorrectPath(pknModelFile) + "\")");
-			
-			handler.execute(varModel + "=preprocessing(" + varNormCnoList + "," + varPknModel + ")");
-			
-			handler.execute(varOptResult + "=gaBinaryT1(" + varNormCnoList + "," + varModel + ",verbose=FALSE)");
-			
-		} catch(Exception e){
-			throw(e);
-		}
+	public void optmise(String pknModelFile) throws Exception {
+		handler.execute(varPknModel + "=readSIF(\"" + getWindowsCorrectPath(pknModelFile) + "\")");
+		
+		handler.execute(varModel + "=preprocessing(" + varNormCnoList + "," + varPknModel + ")");
+		
+		handler.execute(varOptResult + "=gaBinaryT1(" + varNormCnoList + "," + varModel + ",verbose=FALSE)");
 	}
 	
-	public File cutAndPlot() throws Exception{
+	public File cutAndPlot() throws Exception {
 		File plotImg = null;
 
-		try{
-			handler.execute("try(png(filename='"+ varOptResult +".png'))");
-			handler.execute("cutAndPlot(" + varNormCnoList + "," + varModel + ",list(" + varOptResult + "$bString))");
-			handler.execute("dev.off()");
-			byte[] plot = handler.executeReceiveBytes("r=readBin('"+ varOptResult +".png','raw',1024*1024); unlink('"+ varOptResult +".png'); r");
+		handler.execute("try(png(filename='"+ varOptResult +".png'))");
+		handler.execute("cutAndPlot(" + varNormCnoList + "," + varModel + ",list(" + varOptResult + "$bString))");
+		handler.execute("dev.off()");
+		byte[] plot = handler.executeReceiveBytes("r=readBin('"+ varOptResult +".png','raw',1024*1024); unlink('"+ varOptResult +".png'); r");
 
-			plotImg = File.createTempFile("CnoListPlot", ".png");
-			FileOutputStream fos = new FileOutputStream(plotImg);
+		plotImg = File.createTempFile("CnoListPlot", ".png");
+		FileOutputStream fos = new FileOutputStream(plotImg);
 
-			fos.write( plot );
+		fos.write( plot );
 
-			fos.flush();
-			fos.close();
-		} catch(Exception e){
-			throw(e);
-		}
-		
+		fos.flush();
+		fos.close();
+			
 		return plotImg;
 	}
 	
-	public static String getWindowsCorrectPath(String filePath){
+	public static String getWindowsCorrectPath(String filePath) {
 		if( System.getProperty("os.name").toLowerCase().indexOf("win") >= 0)
 			return filePath.replace('\\', '/');
 		

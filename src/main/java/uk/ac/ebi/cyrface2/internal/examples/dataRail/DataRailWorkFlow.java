@@ -47,8 +47,6 @@ public class DataRailWorkFlow {
 	private CySubNetwork dataRailNetwork;
 	private CyNetworkView view;
 	
-	private List<Long> workflowNodesSUIDs;
-	
 	
 	public DataRailWorkFlow (CyActivator activator) {
 		this.activator = activator;
@@ -64,16 +62,8 @@ public class DataRailWorkFlow {
 	
 	public void start () throws Exception {
 		model = new DataRailModel (activator);
-		
-		createModel();
-		
-		contextMenuFactory = new ContextMenuFactory(activator, workflowNodesSUIDs, model);
-		
-		DataRailVisualStyle dataRailVisualStyle = new DataRailVisualStyle(this.activator);
-		dataRailVisualStyle.applyVisualStyle();
-	}
 	
-	private void createModel () {
+		
 		dataRailRootModel = networkFactory.createNetwork();
 		
 		dataRailRoot = rootNetworkManager.getRootNetwork(dataRailRootModel);
@@ -81,26 +71,33 @@ public class DataRailWorkFlow {
 		
 		dataRailNetwork = dataRailRoot.addSubNetwork();
 		networkManager.addNetwork(dataRailNetwork);
-		dataRailNetwork.getRow(dataRailNetwork).set(CySubNetwork.NAME, "rail");
+		dataRailNetwork.getRow(dataRailNetwork).set(CySubNetwork.NAME, "workflow");
 
 		view = networkViewFactory.createNetworkView(dataRailNetwork);
 		networkViewManager.addNetworkView(view);
 		
-		createNodes();
+		List<Long> workflowNodesSUIDs = createNodes();
 		createEdges();
 		
 		view.fitContent();		
 		view.updateView();
+		
+		contextMenuFactory = new ContextMenuFactory(activator, workflowNodesSUIDs, model);
+		activator.registerNodeContexMenu(contextMenuFactory);
+		
+		DataRailVisualStyle dataRailVisualStyle = new DataRailVisualStyle(this.activator);
+		dataRailVisualStyle.applyVisualStyle();
 	}
+			
 		
-		
-	private void createNodes () {
+	private List<Long> createNodes () {
 
 		CyTable defaultNodeTable = dataRailNetwork.getDefaultNodeTable();
 		defaultNodeTable.createColumn(DataRailAttributes.NODE_TYPE, String.class, false);
 		defaultNodeTable.createColumn(DataRailAttributes.NODE_LABEL, String.class, false);
 		defaultNodeTable.createColumn(DataRailAttributes.NODE_STATUS, String.class, false);
-		workflowNodesSUIDs = new ArrayList <Long>();
+		List<Long> workflowNodesSUIDs = new ArrayList <Long>();
+		
 		
 		// create the node of the dataRail
 		CyNode node = dataRailRoot.addNode();
@@ -120,6 +117,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(midasFileNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(midasFileNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_MIDAS_FILE);
 
+		
 		// create the node of the dataRail
 		node = dataRailRoot.addNode();
 		workflowNodesSUIDs.add(node.getSUID());
@@ -138,6 +136,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(loadMidasNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(loadMidasNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_LOAD_MIDAS);
 
+		
 		// create the node of the dataRail
 		node = dataRailRoot.addNode();
 		workflowNodesSUIDs.add(node.getSUID());
@@ -155,6 +154,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(cnoListNode.getSUID()).set(DataRailAttributes.NODE_TYPE, DataRailAttributes.NODE_TYPE_OBJECT);
 		defaultNodeTable.getRow(cnoListNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(cnoListNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_CNO_LIST);
+
 
 		// create the node of the dataRail
 		node = dataRailRoot.addNode();
@@ -174,6 +174,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(normalizeNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(normalizeNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_NORMALIZE);
 
+
 		// create the node of the dataRail
 		node = dataRailRoot.addNode();
 		workflowNodesSUIDs.add(node.getSUID());
@@ -192,6 +193,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(cnoListNormalizedNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(cnoListNormalizedNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_NORMALIZED_CNO_LIST);
 
+		
 		// create the node of the dataRail
 		node = dataRailRoot.addNode();
 		workflowNodesSUIDs.add(node.getSUID());
@@ -210,6 +212,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(optimizeNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(optimizeNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_OPTMIZE);
 
+		
 		// create the node of the dataRail
 		node = dataRailRoot.addNode();
 		workflowNodesSUIDs.add(node.getSUID());
@@ -228,8 +231,7 @@ public class DataRailWorkFlow {
 		defaultNodeTable.getRow(cnoListOptimizedNode.getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_UNDEFINED);
 		defaultNodeTable.getRow(cnoListOptimizedNode.getSUID()).set(DataRailAttributes.NODE_LABEL, DataRailAttributes.NODE_LABEL_OPTMIZED_CNO_LIST);
 		
-		view.updateView();
-		
+		return workflowNodesSUIDs;
 	}
 		
 	private void createEdges () {
