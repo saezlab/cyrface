@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 
 import uk.ac.ebi.cyrface.internal.CyActivator;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
-import uk.ac.ebi.cyrface.internal.rinterface.RserveHandler;
+import uk.ac.ebi.cyrface.internal.rinterface.rserve.RserveHandler;
 import uk.ac.ebi.cyrface.internal.utils.BioconductorPackagesEnum;
 
 public class RFunctionsModel {

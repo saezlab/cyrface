@@ -1,4 +1,4 @@
-package uk.ac.ebi.cyrface.internal.rinterface;
+package uk.ac.ebi.cyrface.internal.rinterface.rserve;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,7 +15,10 @@ public class StartRServeTask extends AbstractTask {
 	public void run(TaskMonitor taskMonitor) throws Exception {
 		this.taskMonitor = taskMonitor;
 		
-		taskMonitor.setTitle("Starting Rserve...");
+		taskMonitor.setTitle("Configuring Cyrface");
+				
+		taskMonitor.setStatusMessage("Starting Rserve...");
+		taskMonitor.setProgress(0.1);		
 		
 		String osName = System.getProperty("os.name").toLowerCase();
 		taskMonitor.setStatusMessage(osName);
@@ -34,8 +37,8 @@ public class StartRServeTask extends AbstractTask {
 			throw new Exception ("Operating system not supported: " + osName);
 		}
 		
-		taskMonitor.setStatusMessage("Cyrface ready!");
 		taskMonitor.setProgress(1.0);
+		taskMonitor.setStatusMessage("Cyrface ready!");
 	}
 
 	private void launchRserveWindows () throws Exception {		
@@ -96,8 +99,8 @@ public class StartRServeTask extends AbstractTask {
 		// Check is Rserve is running
 		startRserve_unix();
 		
-		taskMonitor.setStatusMessage("RServe installed and running, perfect!");
 		taskMonitor.setProgress(0.9);
+		taskMonitor.setStatusMessage("RServe installed and running, perfect!");
 	}
 
 	/**

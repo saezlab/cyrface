@@ -37,13 +37,13 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	private CyNetwork network;
 	private CyTable defaultNodeTable;
 	
-	private List<Long> workflowNodesSUIDs;
+	private List<CyNode> workflowNodes;
 	
 	
-	public ContextMenuFactory (CyActivator activator, List<Long> workflowNodesSUIDs, DataRailModel model) {
+	public ContextMenuFactory (CyActivator activator, List<CyNode> workflowNodes, DataRailModel model) {
 		this.activator = activator;
 		this.model = model;
-		this.workflowNodesSUIDs = workflowNodesSUIDs;
+		this.workflowNodes = workflowNodes;
 	}
 
 	public CyMenuItem createMenuItem (CyNetworkView netView, View<CyNode> nodeView) {
@@ -53,9 +53,10 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 		defaultNodeTable = network.getDefaultNodeTable();
 		
 		final long nodeSUID = nodeView.getModel().getSUID();
+		int stepNumber = getPosition(nodeSUID);
 		CyMenuItem menuItem;
 		
-		switch (workflowNodesSUIDs.indexOf(nodeSUID)) {
+		switch (stepNumber) {
 			case 0: 
 				menuItem = createBrowseMidasMenu(nodeSUID); break;
 			case 1: 
@@ -141,14 +142,14 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	 */
 	private void loadMidasFunction (final long nodeSUID) {
 		try {
-			CyRow step1Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(0));
+			CyRow step1Row = defaultNodeTable.getRow(workflowNodes.get(0).getSUID());
 			boolean isPreviousStepDefined = step1Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 			
 			if (isPreviousStepDefined) {
 				model.getRCommand().loadMidasFile(model.getMidasFilePath());
 
-				network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
-				network.getDefaultNodeTable().getRow(workflowNodesSUIDs.get(2)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+				defaultNodeTable.getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+				defaultNodeTable.getRow(workflowNodes.get(2).getSUID()).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
 				view.updateView();
 
 			}else{
@@ -183,7 +184,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	 */
 	private void plotCNOListFunction (final long nodeSUID) {
 		try {
-			CyRow step2Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(1));
+			CyRow step2Row = defaultNodeTable.getRow(workflowNodes.get(1).getSUID());
 			boolean isPreviousStepDefined = step2Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 
 			if (isPreviousStepDefined) {
@@ -193,7 +194,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 				PlotsDialog panel = new PlotsDialog(cnoListPlot);
 				panel.display();
 
-				network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+				defaultNodeTable.getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
 				view.updateView();
 
 			}else{
@@ -215,11 +216,11 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CyRow step3Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(2));
+				CyRow step3Row = defaultNodeTable.getRow(workflowNodes.get(2).getSUID());
 				boolean isPreviousStepDefined = step3Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 				
 				if (isPreviousStepDefined) {
-					activator.dialogTaskManager.execute(new TaskIterator(new NormaliseCnoListTask(model, workflowNodesSUIDs, defaultNodeTable, network, view)));
+					activator.dialogTaskManager.execute(new TaskIterator(new NormaliseCnoListTask(model, workflowNodes, network, view)));
 				}
 			}
 		});
@@ -253,7 +254,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	 */
 	private void plotNormalisedCNOList (final long nodeSUID) {
 		try {
-			CyRow step4Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(3));
+			CyRow step4Row = defaultNodeTable.getRow(workflowNodes.get(3).getSUID());
 			boolean isPreviousStepDefined = step4Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 
 			if (isPreviousStepDefined) {
@@ -293,7 +294,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	 * @param nodeSUID
 	 */
 	public void optimiseFunction (final long nodeSUID) {
-		CyRow step5Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(4));
+		CyRow step5Row = defaultNodeTable.getRow(workflowNodes.get(4).getSUID());
 		boolean isPreviousStepDefined = step5Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 
 		if (isPreviousStepDefined) {
@@ -306,7 +307,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 			
 			if (browserReturn == JFileChooser.APPROVE_OPTION){
 				model.setPknModelFile(fc.getSelectedFile().getAbsolutePath());
-				activator.dialogTaskManager.execute(new TaskIterator(new OptimiseCnoListTask(model, workflowNodesSUIDs, defaultNodeTable, network, view)));
+				activator.dialogTaskManager.execute(new TaskIterator(new OptimiseCnoListTask(model, workflowNodes, network, view)));
 			}
 		}
 	}
@@ -335,7 +336,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	 */
 	private void plotOptimisedFunction (final long nodeSUID) {
 		try {
-			CyRow step6Row = defaultNodeTable.getRow(workflowNodesSUIDs.get(5));
+			CyRow step6Row = defaultNodeTable.getRow(workflowNodes.get(5).getSUID());
 			boolean isPreviousStepDefined = step6Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 
 			if (isPreviousStepDefined) {
@@ -350,5 +351,15 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private int getPosition(long suid) {
+		for (int i = 0; i < workflowNodes.size(); i++) {
+			if (workflowNodes.get(i).getSUID() == suid) {
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 }

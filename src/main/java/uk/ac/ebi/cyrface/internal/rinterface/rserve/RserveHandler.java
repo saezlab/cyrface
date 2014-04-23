@@ -1,10 +1,11 @@
-package uk.ac.ebi.cyrface.internal.rinterface;
+package uk.ac.ebi.cyrface.internal.rinterface.rserve;
 
 import org.cytoscape.work.TaskIterator;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.Rserve.RConnection;
 
 import uk.ac.ebi.cyrface.internal.CyActivator;
+import uk.ac.ebi.cyrface.internal.rinterface.RHandler;
 import uk.ac.ebi.cyrface.internal.utils.BioconductorPackagesEnum;
 import uk.ac.ebi.cyrface.internal.utils.Rutils;
 
@@ -31,7 +32,9 @@ public class RserveHandler extends RHandler {
 
 	private void establishConnection() throws Exception {
 		if (!isRserveRunning()) {
-			activator.synchronousTaskManager.execute(new TaskIterator(new StartRServeTask()));
+			StartRServeTask startTask = new StartRServeTask();
+			
+			activator.synchronousTaskManager.execute(new TaskIterator(startTask));
 		}
 		
 		if (connection == null) {

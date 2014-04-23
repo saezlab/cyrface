@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyTable;
+import org.cytoscape.model.CyNode;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
@@ -16,8 +16,7 @@ import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
 
 public class NormaliseCnoListTask extends AbstractTask {
 
-	private CyTable defaultNodeTable;
-	private List<Long> workflowNodesSUIDs;
+	private List<CyNode> workflowNodes;
 	private DataRailModel model;
 	
 	private CyNetworkView view;
@@ -32,9 +31,8 @@ public class NormaliseCnoListTask extends AbstractTask {
 	@Tunable(description="Detection")
     public double detection = 0.0;
 	
-	public NormaliseCnoListTask (DataRailModel model, List<Long> workflowNodesSUIDs, CyTable defaultNodeTable, CyNetwork network, CyNetworkView view) {
-		this.defaultNodeTable = defaultNodeTable;
-		this.workflowNodesSUIDs = workflowNodesSUIDs;
+	public NormaliseCnoListTask (DataRailModel model, List<CyNode> workflowNodes, CyNetwork network, CyNetworkView view) {
+		this.workflowNodes = workflowNodes;
 		this.model = model;
 		this.network = network;
 		this.view = view;
@@ -42,7 +40,9 @@ public class NormaliseCnoListTask extends AbstractTask {
 	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
-		taskMonitor.setProgress(0.0);
+		taskMonitor.setTitle("Running data normalization");
+		
+		taskMonitor.setProgress(0.1);
 		taskMonitor.setStatusMessage("Normalizing MIDAS...");
 		
 		model.getRCommand().normaliseCnoList(model);
@@ -52,12 +52,12 @@ public class NormaliseCnoListTask extends AbstractTask {
 		model.getRCommand().writeNormalizedMIDAS(normalizedMidasFile.getAbsolutePath());
 		model.setNormalizedMidasFile(normalizedMidasFile);
 		
-		network.getDefaultNodeTable().getRow(workflowNodesSUIDs.get(3)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
-		network.getDefaultNodeTable().getRow(workflowNodesSUIDs.get(4)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+		network.getRow(workflowNodes.get(3)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
+		network.getRow(workflowNodes.get(4)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
 		
 		view.updateView();
 		
-		taskMonitor.setProgress(1.0);
 		taskMonitor.setStatusMessage("Normalization done.");
+		taskMonitor.setProgress(1.0);
 	}
 }
