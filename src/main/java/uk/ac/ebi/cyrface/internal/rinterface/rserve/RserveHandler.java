@@ -33,8 +33,7 @@ public class RserveHandler extends RHandler {
 	private void establishConnection() throws Exception {
 		if (!isRserveRunning()) {
 			StartRServeTask startTask = new StartRServeTask();
-			
-			activator.synchronousTaskManager.execute(new TaskIterator(startTask));
+			activator.dialogTaskManager.execute(new TaskIterator(startTask));
 		}
 		
 		if (connection == null) {

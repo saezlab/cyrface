@@ -27,6 +27,9 @@ mvn-rserve:
 	mvn install:install-file -DgroupId=net.rforge -DartifactId=Rserve -Dversion=1.8 -Dpackaging=jar -Dfile=$(CURDIR)/lib/RserveEngine.jar
 	mvn install:install-file -DgroupId=net.rforge -DartifactId=REngine -Dversion=1.8 -Dpackaging=jar -Dfile=$(CURDIR)/lib/REngine.jar
 
+mvn-rcaller:
+	mvn install:install-file -DgroupId=com.google -DartifactId=RCaller -Dversion=2.1.1 -Dpackaging=jar -Dfile=$(CURDIR)/lib/RCaller-2.1.1-SNAPSHOT.jar
+
 mvn-batik:
 	mvn install:install-file -DgroupId=batik -DartifactId=batik-all -Dversion=1.6 -Dpackaging=jar -Dfile=$(CURDIR)/lib/batik-all-1.6.jar
 

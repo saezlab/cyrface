@@ -201,6 +201,11 @@
 			<version>1.8</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google</groupId>
+			<artifactId>RCaller</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
 			<groupId>batik</groupId>
 			<artifactId>batik-all</artifactId>
 			<version>1.6</version>
