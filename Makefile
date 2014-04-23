@@ -1,7 +1,7 @@
 # Makefile 
 
 # Copyright (C) 2014 - Saez-Rodriguez Lab
-# Cyrface 3
+# Cyrface
 
 # Author: Emanuel Goncalves <emanuel@ebi.ac.uk>
 
@@ -15,7 +15,7 @@ CYRFACE_NAME=cyrface
 CYRFACE_VERSION=2.0.0
 
 default: mvn-build
-	mv target/$(CYRFACE_NAME)-$(CYRFACE_VERSION).jar /Users/emanuel/CytoscapeConfiguration/3/apps/installed/
+	cp target/$(CYRFACE_NAME)-$(CYRFACE_VERSION).jar /Users/emanuel/CytoscapeConfiguration/3/apps/installed/
 
 lsof:
 	lsof -i | grep Rserve
