@@ -322,7 +322,7 @@
 			<artifactId>vizmap-impl</artifactId>
 			<version>${cytoscape.api.version}</version>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 
 	<description>Cyrface allows Cytoscape plug-ins to connect to any function and package developed in R. Cyrface can be used to run R packages from within the Cytoscape environment making use of a graphical user interface.</description>

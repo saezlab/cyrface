@@ -11,7 +11,6 @@ import uk.ac.ebi.cyrface.internal.rinterface.rserve.RserveHandler;
 public class CustomCommandTask extends AbstractTask implements ObservableTask {
 
 	private CyServiceRegistrar cyServiceRegistrar;
-	
 	private StringBuilder outputString;
 	
 	@Tunable(description="command")
