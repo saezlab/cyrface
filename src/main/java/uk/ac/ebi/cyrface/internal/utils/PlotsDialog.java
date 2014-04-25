@@ -72,7 +72,6 @@ public class PlotsDialog extends JDialog{
 		
 		} else {
 			Image plotImage = getPlotAsImage();
-			
 			if (plotImage != null) 
 				plotPanel = new ImagesPanel(plotImage);
 		}
@@ -124,10 +123,10 @@ public class PlotsDialog extends JDialog{
 			int browserReturn = fc.showSaveDialog(null);
 			String savePath = "";
 					
-			if (browserReturn == JFileChooser.APPROVE_OPTION){
+			if (browserReturn == JFileChooser.APPROVE_OPTION) {
 				savePath = fc.getSelectedFile().getAbsolutePath();
 				
-				savePath = savePath + "r_plot" + ".png";
+				savePath = savePath + "." + FilenameUtils.getExtension(plotFile.getName());
 				
 				File destinationFile = new File(savePath);
 				
