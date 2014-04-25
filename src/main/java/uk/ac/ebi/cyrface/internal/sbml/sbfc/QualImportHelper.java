@@ -45,7 +45,7 @@ public class QualImportHelper
 	private void warn(String msg)
 	{
 		warnings.add(msg);
-		System.out.println (msg);
+//		System.out.println (msg);
 	}
 	
 
@@ -92,7 +92,7 @@ public class QualImportHelper
             }
 		}
 		
-		System.out.println ("Number of transitions: " + extendeModel.getListOfTransitions().size());
+//		System.out.println ("Number of transitions: " + extendeModel.getListOfTransitions().size());
 		for (Transition t : extendeModel.getListOfTransitions())
 		{
 			List<Node> inputs = new ArrayList<Node>();
