@@ -1,16 +1,5 @@
 # Makefile 
 
-# Copyright (C) 2014 - Saez-Rodriguez Lab
-# Cyrface
-
-# Author: Emanuel Goncalves <emanuel@ebi.ac.uk>
-
-# This program is free software, you can redistribute it and/or
-# modify it under the terms of the new-style BSD license.
-
-# You should have received a copy of the BSD license along with this
-# program. If not, see <http://www.debian.org/misc/bsd.license>.
-
 CYRFACE_NAME=cyrface
 CYRFACE_VERSION=2.0.0
 
