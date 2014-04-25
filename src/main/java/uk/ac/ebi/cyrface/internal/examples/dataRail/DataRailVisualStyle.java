@@ -2,6 +2,9 @@ package uk.ac.ebi.cyrface.internal.examples.dataRail;
 
 import java.awt.Color;
 
+import org.cytoscape.app.CyAppAdapter;
+import org.cytoscape.application.CyApplicationManager;
+import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
@@ -13,13 +16,11 @@ import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.view.vizmap.mappings.DiscreteMapping;
 import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 
-import uk.ac.ebi.cyrface.internal.CyActivator;
-
 public class DataRailVisualStyle {
 	
 	private static final String visualStyleName = "DataRailVisualStyle";
 	
-	private CyActivator activator;
+	private CyServiceRegistrar cyServiceRegistrar;
 	
 	private VisualStyleFactory vsFactory;
 	private VisualMappingManager vmManager;
@@ -28,14 +29,14 @@ public class DataRailVisualStyle {
 	private VisualMappingFunctionFactory vmFunctionFactoryP;
 	
 	
-	public DataRailVisualStyle (CyActivator activator) {
-		this.activator = activator;
+	public DataRailVisualStyle (CyServiceRegistrar cyServiceRegistrar) {
+		this.cyServiceRegistrar = cyServiceRegistrar;
 		
-		vmManager = activator.cyAppAdapter.getVisualMappingManager(); 
-		vsFactory = activator.cyAppAdapter.getVisualStyleFactory();
+		vmManager = this.cyServiceRegistrar.getService(CyAppAdapter.class).getVisualMappingManager(); 
+		vsFactory = this.cyServiceRegistrar.getService(CyAppAdapter.class).getVisualStyleFactory();
 		
-		vmFunctionFactoryD = activator.cyAppAdapter.getVisualMappingFunctionDiscreteFactory(); 
-		vmFunctionFactoryP = activator.cyAppAdapter.getVisualMappingFunctionPassthroughFactory();
+		vmFunctionFactoryD = this.cyServiceRegistrar.getService(CyAppAdapter.class).getVisualMappingFunctionDiscreteFactory(); 
+		vmFunctionFactoryP = this.cyServiceRegistrar.getService(CyAppAdapter.class).getVisualMappingFunctionPassthroughFactory();
 	}
 	
 	
@@ -87,7 +88,7 @@ public class DataRailVisualStyle {
 	public void applyVisualStyle () {
 		VisualStyle vs = createDataRailVisualStyle();
 		vmManager.setCurrentVisualStyle(vs);
-		activator.cyApplicationManager.getCurrentNetworkView().updateView();
+		cyServiceRegistrar.getService(CyApplicationManager.class).getCurrentNetworkView().updateView();
 	}	
 	
 	public VisualStyle getVisualStyle (String name) {

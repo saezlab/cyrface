@@ -1,12 +1,16 @@
 package uk.ac.ebi.cyrface.internal.rinterface;
 
+import org.cytoscape.service.util.CyServiceRegistrar;
+
 import uk.ac.ebi.cyrface.internal.utils.BioconductorPackagesEnum;
 
 public abstract class RHandler {
 
-	private String rInterfaceLibraryName;
+	protected CyServiceRegistrar cyServiceRegistrar;
+	protected String rInterfaceLibraryName;
 	
-	public RHandler(String rInterfaceLibraryName){
+	public RHandler (CyServiceRegistrar cyServiceRegistrar, String rInterfaceLibraryName) {
+		this.cyServiceRegistrar = cyServiceRegistrar;
 		this.rInterfaceLibraryName = rInterfaceLibraryName;
 	}
 	

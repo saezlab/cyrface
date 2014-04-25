@@ -3,14 +3,15 @@ package uk.ac.ebi.cyrface.internal.examples.dataRail.menu;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import uk.ac.ebi.cyrface.internal.CyActivator;
+import org.cytoscape.service.util.CyServiceRegistrar;
+
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface.internal.rinterface.rserve.RserveHandler;
 import uk.ac.ebi.cyrface.internal.utils.BioconductorPackagesEnum;
 
 public class RFunctionsModel {
 	
-	private CyActivator activator;
+	private CyServiceRegistrar cyServiceRegistrar;
 	
 	private RserveHandler handler;
 	
@@ -21,10 +22,10 @@ public class RFunctionsModel {
 	public static String VAR_OPT_RESULT = "result";
 	
 	
-	public RFunctionsModel (DataRailModel model, CyActivator activator) throws Exception {
-		this.activator = activator;
+	public RFunctionsModel (DataRailModel model, CyServiceRegistrar cyServiceRegistrar) throws Exception {
+		this.cyServiceRegistrar = cyServiceRegistrar;
 		
-		this.handler = new RserveHandler(activator);
+		this.handler = new RserveHandler(cyServiceRegistrar);
 		
 		initializePackages();
 	}

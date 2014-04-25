@@ -1,24 +1,22 @@
 package uk.ac.ebi.cyrface.internal.rinterface.rserve;
 
+import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.work.TaskIterator;
+import org.cytoscape.work.swing.DialogTaskManager;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.Rserve.RConnection;
 
-import uk.ac.ebi.cyrface.internal.CyActivator;
 import uk.ac.ebi.cyrface.internal.rinterface.RHandler;
 import uk.ac.ebi.cyrface.internal.utils.BioconductorPackagesEnum;
 import uk.ac.ebi.cyrface.internal.utils.Rutils;
 
 public class RserveHandler extends RHandler {
 
-	private static RConnection connection = null;
-	private CyActivator activator;
+	private RConnection connection = null;
 
 	
-	public RserveHandler (CyActivator activator) throws Exception {
-		super("Rserve");
-		
-		this.activator = activator;
+	public RserveHandler (CyServiceRegistrar cyServiceRegistrar) throws Exception {
+		super(cyServiceRegistrar, "Rserve");
 		
 		establishConnection();
 	}
@@ -33,12 +31,13 @@ public class RserveHandler extends RHandler {
 	private void establishConnection() throws Exception {
 		if (!isRserveRunning()) {
 			StartRServeTask startTask = new StartRServeTask();
-			activator.dialogTaskManager.execute(new TaskIterator(startTask));
+			StartRServeTaskObservable startTaskObservable = new StartRServeTaskObservable();
+			
+			cyServiceRegistrar.getService(DialogTaskManager.class).execute(new TaskIterator(startTask), startTaskObservable);
+			while (!startTaskObservable.isComplete()) { Thread.sleep(100); }
 		}
 		
-		if (connection == null) {
-			connection = new RConnection();
-		}
+		connection = new RConnection();
 	}
 
 	public boolean checkInstalledPackge(BioconductorPackagesEnum packageName) throws Exception {

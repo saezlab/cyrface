@@ -5,43 +5,40 @@ import java.io.File;
 import java.io.InputStreamReader;
 
 import org.cytoscape.work.AbstractTask;
+import org.cytoscape.work.ObservableTask;
 import org.cytoscape.work.TaskMonitor;
 
-public class StartRServeTask extends AbstractTask {
+public class StartRServeTask extends AbstractTask implements ObservableTask {
 
-	private TaskMonitor taskMonitor;
+	public StartRServeTask() { }
 	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
-		this.taskMonitor = taskMonitor;
-		
 		taskMonitor.setTitle("Configuring Cyrface");
-				
+
+		taskMonitor.setProgress(0.0);
 		taskMonitor.setStatusMessage("Starting Rserve...");
-		taskMonitor.setProgress(0.1);		
 		
 		String osName = System.getProperty("os.name").toLowerCase();
 		taskMonitor.setStatusMessage(osName);
-		taskMonitor.setProgress(0.1);
 		
 		if (osName.indexOf("win") >= 0) {			
-			launchRserveWindows();
+			launchRserveWindows(taskMonitor);
 	
 		} else if (osName.indexOf("mac") >= 0) {
-			launchRserveUnix();
+			launchRserveUnix(taskMonitor);
 	
 		} else if (osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0 ) {
-			launchRserveUnix();
+			launchRserveUnix(taskMonitor);
 			
 		} else {
 			throw new Exception ("Operating system not supported: " + osName);
 		}
 		
-		taskMonitor.setProgress(1.0);
 		taskMonitor.setStatusMessage("Cyrface ready!");
 	}
 
-	private void launchRserveWindows () throws Exception {		
+	private void launchRserveWindows (TaskMonitor taskMonitor) throws Exception {		
 		String rPath = "";
 
 		// check the windows registry for an "R"-entry that proofs that and where R is installed
@@ -82,24 +79,21 @@ public class StartRServeTask extends AbstractTask {
 
 	}
 
-	private void launchRserveUnix () throws Exception {
+	private void launchRserveUnix (TaskMonitor taskMonitor) throws Exception {
 
 		// Check if R is installed
 		if (!rIsInstalled_unix()) throw new Exception("R is not installed");
 		
 		taskMonitor.setStatusMessage("R installed, good!");
-		taskMonitor.setProgress(0.3);
 
 		// Check is Rserve is installed
 		if (!rserveIsInstalled_unix()) installRserve_unix();
 		
 		taskMonitor.setStatusMessage("RServe installed, good!");
-		taskMonitor.setProgress(0.6);
 
 		// Check is Rserve is running
 		startRserve_unix();
 		
-		taskMonitor.setProgress(0.9);
 		taskMonitor.setStatusMessage("RServe installed and running, perfect!");
 	}
 
@@ -240,5 +234,10 @@ public class StartRServeTask extends AbstractTask {
 		else
 			return false;
 	}
-	
+
+	@Override
+	public <R> R getResults(Class<? extends R> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 }

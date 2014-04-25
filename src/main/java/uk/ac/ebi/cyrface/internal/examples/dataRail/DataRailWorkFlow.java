@@ -2,20 +2,25 @@ package uk.ac.ebi.cyrface.internal.examples.dataRail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.cytoscape.model.CyNetwork;
+import org.cytoscape.model.CyNetworkFactory;
+import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyTable;
+import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.view.model.CyNetworkView;
+import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.model.View;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 
-import uk.ac.ebi.cyrface.internal.CyActivator;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.menu.ContextMenuFactory;
 
 public class DataRailWorkFlow {
 	
-	private CyActivator activator;
+	private CyServiceRegistrar cyServiceRegistrar;
 	
 	private DataRailModel model;
 	private List<CyNode> workflowNodes;
@@ -24,16 +29,16 @@ public class DataRailWorkFlow {
 	private CyNetwork network;
 	private CyNetworkView view;
 	
-	public DataRailWorkFlow (CyActivator activator) {
-		this.activator = activator;
+	public DataRailWorkFlow (CyServiceRegistrar cyServiceRegistrar) {
+		this.cyServiceRegistrar = cyServiceRegistrar;
 		this.workflowNodes = new ArrayList<CyNode>();
 	}
 	
 	public void start () throws Exception {
-		model = new DataRailModel (activator);
+		model = new DataRailModel (cyServiceRegistrar);
 		
 		// Create CyNetwork and name it
-		network = activator.cyNetworkFactory.createNetwork();
+		network = cyServiceRegistrar.getService(CyNetworkFactory.class).createNetwork();
 		network.getRow(network).set(CyNetwork.NAME, "DataRail");
 		
 		// Create Wroflows Nodes and Edges
@@ -44,21 +49,24 @@ public class DataRailWorkFlow {
 		setNodesAttributes();
 		
 		// Create Network View
-		view = activator.cyNetworkViewFactory.createNetworkView(network);
-		activator.cyNetworkManager.addNetwork(network);
-		activator.cyNetworkViewManager.addNetworkView(view);
+		view = cyServiceRegistrar.getService(CyNetworkViewFactory.class).createNetworkView(network);
+		cyServiceRegistrar.getService(CyNetworkManager.class).addNetwork(network);
+		cyServiceRegistrar.getService(CyNetworkViewManager.class).addNetworkView(view);
 		
 		// Set nodes layout
 		setNodesPositions();
 		
-		contextMenuFactory = new ContextMenuFactory(activator, workflowNodes, model);
-		activator.registerNodeContexMenu(contextMenuFactory);
-		
-		DataRailVisualStyle dataRailVisualStyle = new DataRailVisualStyle(this.activator);
-		dataRailVisualStyle.applyVisualStyle();
-		
 		view.fitContent();
 		view.updateView();
+		
+		// Create and Register Nodes Context Menu
+		contextMenuFactory = new ContextMenuFactory(cyServiceRegistrar, workflowNodes, model);
+		Properties props = new Properties();
+		props.put("preferredMenu", "Apps.Cyrface");
+		cyServiceRegistrar.registerAllServices(contextMenuFactory, props);
+		
+		DataRailVisualStyle dataRailVisualStyle = new DataRailVisualStyle(cyServiceRegistrar);
+		dataRailVisualStyle.applyVisualStyle();
 	}
 			
 		

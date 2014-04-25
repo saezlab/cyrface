@@ -2,6 +2,8 @@ package uk.ac.ebi.cyrface.internal.rinterface.rcaller;
 
 import java.io.File;
 
+import org.cytoscape.service.util.CyServiceRegistrar;
+
 import rcaller.RCaller;
 import rcaller.RCode;
 import uk.ac.ebi.cyrface.internal.rinterface.RHandler;
@@ -11,11 +13,9 @@ import uk.ac.ebi.cyrface.internal.utils.Rutils;
 
 public class RCallerHandler extends RHandler {
 	
-	public RCallerHandler() {
-		super("RCaller");
-		
+	public RCallerHandler(CyServiceRegistrar cyServiceRegistrar) {
+		super(cyServiceRegistrar, "RCaller");
 	}
-
 	
 	public boolean checkInstalledPackge(BioconductorPackagesEnum packageName) throws Exception{
 		return checkInstalledPackge(packageName.getPackageName());
@@ -37,12 +37,6 @@ public class RCallerHandler extends RHandler {
 		return result;
 	}
 	
-	/**
-	 * 
-	 * Installs Bioconductor, by running source("http://www.bioconductor.org/biocLite.R"). Required in order to install Bioconductor packages.
-	 * 
-	 * @throws Exception
-	 */
 	public void installBioconductor() throws Exception{
 		RCaller caller = generateCaller();
 		

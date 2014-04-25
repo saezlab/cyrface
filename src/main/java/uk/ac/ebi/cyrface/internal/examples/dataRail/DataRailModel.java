@@ -2,7 +2,8 @@ package uk.ac.ebi.cyrface.internal.examples.dataRail;
 
 import java.io.File;
 
-import uk.ac.ebi.cyrface.internal.CyActivator;
+import org.cytoscape.service.util.CyServiceRegistrar;
+
 import uk.ac.ebi.cyrface.internal.examples.dataRail.menu.RFunctionsModel;
 
 public class DataRailModel {
@@ -24,8 +25,8 @@ public class DataRailModel {
 	private File optimizedMidasFile = null;
 	
 	
-	public DataRailModel (CyActivator activator) throws Exception {
-		this.rCommands = new RFunctionsModel (this, activator);
+	public DataRailModel (CyServiceRegistrar cyServiceRegistrar) throws Exception {
+		this.rCommands = new RFunctionsModel (this, cyServiceRegistrar);
 		this.ec50 = DataRailAttributes.EC50_DEFAULT;
 		this.detection = DataRailAttributes.DETECTION_DEFAULT;
 		this.saturation = DataRailAttributes.SATURATION_DEFAULT;

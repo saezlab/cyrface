@@ -11,17 +11,19 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CyMenuItem;
 import org.cytoscape.application.swing.CyNodeViewContextMenuFactory;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
+import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
 import org.cytoscape.work.TaskIterator;
+import org.cytoscape.work.swing.DialogTaskManager;
 
-import uk.ac.ebi.cyrface.internal.CyActivator;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailAttributes;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.tasks.NormaliseCnoListTask;
@@ -30,7 +32,7 @@ import uk.ac.ebi.cyrface.internal.utils.PlotsDialog;
 
 public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	
-	private CyActivator activator;	
+	private CyServiceRegistrar cyServiceRegistrar;	
 	private DataRailModel model;
 	
 	private CyNetworkView view;
@@ -40,16 +42,16 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	private List<CyNode> workflowNodes;
 	
 	
-	public ContextMenuFactory (CyActivator activator, List<CyNode> workflowNodes, DataRailModel model) {
-		this.activator = activator;
+	public ContextMenuFactory (CyServiceRegistrar cyServiceRegistrar, List<CyNode> workflowNodes, DataRailModel model) {
+		this.cyServiceRegistrar = cyServiceRegistrar;
 		this.model = model;
 		this.workflowNodes = workflowNodes;
 	}
 
 	public CyMenuItem createMenuItem (CyNetworkView netView, View<CyNode> nodeView) {
 		
-		view = activator.cyApplicationManager.getCurrentNetworkView();
-		network = activator.cyApplicationManager.getCurrentNetwork();
+		view = cyServiceRegistrar.getService(CyApplicationManager.class).getCurrentNetworkView();
+		network = cyServiceRegistrar.getService(CyApplicationManager.class).getCurrentNetwork();
 		defaultNodeTable = network.getDefaultNodeTable();
 		
 		final long nodeSUID = nodeView.getModel().getSUID();
@@ -220,7 +222,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 				boolean isPreviousStepDefined = step3Row.get(DataRailAttributes.NODE_STATUS, String.class).equals(DataRailAttributes.NODE_STATUS_DEFINED);
 				
 				if (isPreviousStepDefined) {
-					activator.dialogTaskManager.execute(new TaskIterator(new NormaliseCnoListTask(model, workflowNodes, network, view)));
+					cyServiceRegistrar.getService(DialogTaskManager.class).execute(new TaskIterator(new NormaliseCnoListTask(model, workflowNodes, network, view)));
 				}
 			}
 		});
@@ -307,7 +309,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 			
 			if (browserReturn == JFileChooser.APPROVE_OPTION){
 				model.setPknModelFile(fc.getSelectedFile().getAbsolutePath());
-				activator.dialogTaskManager.execute(new TaskIterator(new OptimiseCnoListTask(model, workflowNodes, network, view)));
+				cyServiceRegistrar.getService(DialogTaskManager.class).execute(new TaskIterator(new OptimiseCnoListTask(model, workflowNodes, network, view)));
 			}
 		}
 	}
