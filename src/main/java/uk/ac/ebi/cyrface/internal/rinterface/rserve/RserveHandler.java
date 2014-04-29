@@ -61,10 +61,11 @@ public class RserveHandler extends RHandler {
 	}
 
 	public void installBioconductorPackage(String packageName) throws Exception {
-		REXP rexp = connection.parseAndEval("source(\"http://bioconductor.org/biocLite.R\")");
+		connection.parseAndEval("source(\"http://bioconductor.org/biocLite.R\")");
+		connection.parseAndEval("biocLite(ask = F, suppressUpdates = T)");
 
 		if( !checkInstalledPackge(packageName) )
-			rexp = connection.parseAndEval("biocLite('" + packageName + "', suppressUpdates=TRUE)");
+			connection.parseAndEval("biocLite('" + packageName + "', suppressUpdates = T)");
 
 		libraryPackage(packageName);
 	}
