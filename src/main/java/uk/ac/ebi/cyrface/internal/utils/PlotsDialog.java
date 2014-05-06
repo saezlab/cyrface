@@ -24,7 +24,7 @@ import org.apache.commons.io.FilenameUtils;
 
 @SuppressWarnings("serial") 
 
-public class PlotsDialog extends JDialog{
+public class PlotsDialog extends JDialog {
 
 	private File plotFile;
 

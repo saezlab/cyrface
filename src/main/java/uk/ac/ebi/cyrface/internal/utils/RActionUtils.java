@@ -1,9 +1,12 @@
 package uk.ac.ebi.cyrface.internal.utils;
 
+
 public class RActionUtils {
 
 	public static final String CAPTURE_FUNCTION_PREFIX = "messages <- capture.output(";
 	public static final String CAPTURE_FUNCTION_SUFFIX = ")";
+	
+	public static final String PLOT_DEVICE = "svg";
 	
 	
 	public static String getWindowsCorrectPath (String filePath) {
@@ -36,5 +39,4 @@ public class RActionUtils {
 		
 		return messages.toString();
 	}
-	
 }
