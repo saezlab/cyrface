@@ -15,6 +15,7 @@ import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailAttributes;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface.internal.sbml.sbfc.Qual2CellNOpt;
 import uk.ac.ebi.cyrface.internal.sbml.sbfc.SBMLQualModel;
+import uk.ac.ebi.cyrface.internal.utils.Rutils;
 
 public class OptimiseCnoListTask extends AbstractTask {
 	
@@ -49,9 +50,9 @@ public class OptimiseCnoListTask extends AbstractTask {
 			GeneralModel convertedModel = qual2cno.convert(smblModel);
 			
 			File sifModel = File.createTempFile(FilenameUtils.getName(model.getPknModelFile()), ".sif");
-			convertedModel.modelToFile(sifModel.getAbsolutePath());
+			convertedModel.modelToFile(Rutils.getWindowsCorrectPath(sifModel.getAbsolutePath()));
 			
-			model.setPknModelFile(sifModel.getAbsolutePath());
+			model.setPknModelFile(Rutils.getWindowsCorrectPath(sifModel.getAbsolutePath()));
 		}
 		
 		model.getRCommand().optmise(model.getPknModelFile());

@@ -13,6 +13,7 @@ import org.cytoscape.work.Tunable;
 
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailAttributes;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
+import uk.ac.ebi.cyrface.internal.utils.Rutils;
 
 public class NormaliseCnoListTask extends AbstractTask {
 
@@ -49,7 +50,7 @@ public class NormaliseCnoListTask extends AbstractTask {
 		
 		File normalizedMidasFile = File.createTempFile(FilenameUtils.getName(model.getMidasFilePath())+"_normalized", ".csv");
 		normalizedMidasFile.delete();
-		model.getRCommand().writeNormalizedMIDAS(normalizedMidasFile.getAbsolutePath());
+		model.getRCommand().writeNormalizedMIDAS(Rutils.getWindowsCorrectPath(normalizedMidasFile.getAbsolutePath()));
 		model.setNormalizedMidasFile(normalizedMidasFile);
 		
 		network.getRow(workflowNodes.get(3)).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);

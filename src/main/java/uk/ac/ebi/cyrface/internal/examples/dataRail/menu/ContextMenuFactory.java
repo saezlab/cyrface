@@ -29,6 +29,7 @@ import uk.ac.ebi.cyrface.internal.examples.dataRail.DataRailModel;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.tasks.NormaliseCnoListTask;
 import uk.ac.ebi.cyrface.internal.examples.dataRail.tasks.OptimiseCnoListTask;
 import uk.ac.ebi.cyrface.internal.utils.PlotsDialog;
+import uk.ac.ebi.cyrface.internal.utils.Rutils;
 
 public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 	
@@ -111,7 +112,7 @@ public class ContextMenuFactory implements CyNodeViewContextMenuFactory {
 		int browserReturn = fc.showOpenDialog(null);
 		
 		if (browserReturn == JFileChooser.APPROVE_OPTION){
-			String midasFilePath = fc.getSelectedFile().getAbsolutePath();
+			String midasFilePath = Rutils.getWindowsCorrectPath(fc.getSelectedFile().getAbsolutePath());
 			model.setMidasFilePath(midasFilePath);
 			
 			network.getDefaultNodeTable().getRow(nodeSUID).set(DataRailAttributes.NODE_STATUS, DataRailAttributes.NODE_STATUS_DEFINED);
