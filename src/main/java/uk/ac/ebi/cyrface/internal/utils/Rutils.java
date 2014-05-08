@@ -101,4 +101,18 @@ public class Rutils {
 		return rValuesList.toString();
 	}
 
+	/**
+	 * Method to fix file paths in windows. Backward slash, typically used in windows file paths, is processed as the starting char for hexdecimal codes in R.
+	 * 
+	 * Replacing backward slash with forward slash solves the problem as it is also support by windows.
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	public static String getWindowsCorrectPath (String filePath) {
+		if( System.getProperty("os.name").toLowerCase().indexOf("win") >= 0)
+			return filePath.replace('\\', '/');
+		
+		return filePath;
+	}
 }
