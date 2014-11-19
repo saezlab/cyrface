@@ -1,14 +1,13 @@
 package uk.ac.ebi.cyrface.internal.sbml.sbfc;
 
-import org.apache.batik.xml.XMLException;
 import org.sbfc.api.GeneralConverter;
 import org.sbfc.api.GeneralModel;
+import org.sbfc.exceptions.ConversionException;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.xml.XMLException;
 
 import uk.ac.ebi.cyrface.internal.sbml.simplenet.Network;
 import uk.ac.ebi.cyrface.internal.sbml.simplenet.NetworkException;
-
-import com.thoughtworks.xstream.converters.ConversionException;
 
 public class Qual2CellNOpt extends GeneralConverter
 {
@@ -22,8 +21,7 @@ public class Qual2CellNOpt extends GeneralConverter
 			SBMLDocument doc = inModel.getSBMLDocument();
 
 			QualImportHelper qual2sif = new QualImportHelper();
-			Network net;
-			net = qual2sif.doImport(doc);
+			Network net = qual2sif.doImport(doc);
 			CellNOptModel outModel = new CellNOptModel(net);
 			return outModel;
 		}

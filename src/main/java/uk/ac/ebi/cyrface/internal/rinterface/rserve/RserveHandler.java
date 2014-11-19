@@ -50,13 +50,10 @@ public class RserveHandler extends RHandler {
 	}
 
 	public boolean checkInstalledPackge(String packageName) throws Exception {
-		REXP rexp = null;
-		rexp = connection.parseAndEval("is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])");
+		REXP rexp = connection.parseAndEval("is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])");
 		rexp = connection.parseAndEval("is.installed('"+ packageName  +"')");
 
-		boolean isPackageInstalled = (rexp.asInteger() == 1) ? true : false;
-
-		return isPackageInstalled;			
+		return (rexp.asInteger() == 1) ? true : false;			
 	}
 
 
@@ -66,10 +63,10 @@ public class RserveHandler extends RHandler {
 	}
 
 	public void installBioconductorPackage(String packageName) throws Exception {
-		connection.parseAndEval("source(\"http://bioconductor.org/biocLite.R\")");
-
-		if (!checkInstalledPackge(packageName))
+		if (!checkInstalledPackge(packageName)) {
+			connection.parseAndEval("source(\"http://bioconductor.org/biocLite.R\")");
 			connection.parseAndEval("biocLite('" + packageName + "', ask = F)");
+		}
 
 		libraryPackage(packageName);
 	}

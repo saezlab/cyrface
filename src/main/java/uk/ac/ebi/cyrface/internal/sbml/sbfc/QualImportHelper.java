@@ -45,7 +45,7 @@ public class QualImportHelper
 	private void warn(String msg)
 	{
 		warnings.add(msg);
-//		System.out.println (msg);
+		System.out.println (msg);
 	}
 	
 
@@ -92,7 +92,7 @@ public class QualImportHelper
             }
 		}
 		
-//		System.out.println ("Number of transitions: " + extendeModel.getListOfTransitions().size());
+		System.out.println ("Number of transitions: " + extendeModel.getListOfTransitions().size());
 		for (Transition t : extendeModel.getListOfTransitions())
 		{
 			List<Node> inputs = new ArrayList<Node>();
@@ -143,10 +143,10 @@ public class QualImportHelper
 		return result;
 	}
 	
-	private void parseMath(ASTNode math, Network result, Node parent, List<? extends Node> inputs)
-	{
-		switch (math.getType())
-		{
+	private void parseMath(ASTNode math, Network result, Node parent, List<? extends Node> inputs) {
+		
+		switch (math.getType()) {
+		
 			case RELATIONAL_GEQ:
 			case RELATIONAL_LT:
 			{
@@ -165,22 +165,26 @@ public class QualImportHelper
 			}
 			break;
 			case LOGICAL_AND:
-				for (ASTNode child : math.getChildren())
-				{
+				List<ASTNode> children = math.getChildren();
+				for (ASTNode child : children) {
+					
 					// See if the math node carries a suitable Id. 
 					// For round-trip conversion, it's useful to re-use the same gate number as we had before
 					String nodeId = math.getId();
 					// If the node Id doesn't start with "and", it's not suitable for our purposes and we have to generate a new id.
 					if (nodeId != null && !nodeId.startsWith("and")) nodeId = null;
-					if (nodeId == null)
-					{
+					
+					if (nodeId == null) {
 						// generate a suitable Node Id. 
 						int count = 1;
 						nodeId = "and" + count++;
-						while (result.exists (nodeId)) nodeId = "and" + count++;
+						while (result.exists(nodeId)) { nodeId = "and" + count++; }
 					}
+					
+					math.setId(nodeId);
+					
 					Node gate = result.createOrGetNode(nodeId);					
-					result.createEdge (parent, gate, "1");
+					result.createEdge (gate, parent, "1");
 					parseMath (child, result, gate, inputs);
 				}
 			break;

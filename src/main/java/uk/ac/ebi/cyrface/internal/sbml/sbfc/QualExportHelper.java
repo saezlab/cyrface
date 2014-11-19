@@ -238,8 +238,7 @@ public class QualExportHelper
 		 * 
 		 * @param output the transition output or destination node.
 		 */
-		TransitionProxy (Node output)
-		{
+		TransitionProxy (Node output) {
 			this.id = "t" + counter++;
 			this.output = output;
 			makeTree (output);
@@ -249,20 +248,17 @@ public class QualExportHelper
 		public Set<Node> getInputs() { return inputs; }
 //		public Node getOutput () { return output; }
 		public Op getOperation() { return operation; }
-		public boolean isNegative(Node n)
-		{
+		
+		public boolean isNegative(Node n) {
 			return negativeInputs.contains(n);
 		}
 		
 		private void makeTree (Node dest)
 		{
-			if (dest.getIncoming().size() == 1)
-			{
+			if (dest.getIncoming().size() == 1) {
 				Edge e = dest.getIncoming().get(0);
 				operation = makeOp (e);
-			}
-			else
-			{
+			} else {
 				operation = new OrGate (dest.getIncoming(), this);
 			}
 		}
@@ -271,15 +267,16 @@ public class QualExportHelper
 		{
 			boolean isNegative = e.getPredictate().equals ("-1");
 			Node n = e.getSrc();
-			if (isGate(n))
-			{
-				if (isNegative)
+			
+			if (isGate(n)) {
+				
+				if (isNegative) {
 					return new NotGate(new AndGate(n, this));
-				else
+				} else {
 					return new AndGate(n, this);
-			}
-			else
-			{
+				}
+				
+			} else {
 				return new Leaf(n, isNegative, this);
 			}
 		}
@@ -354,9 +351,9 @@ public class QualExportHelper
 		}
 	}
 	
-	public void fromSif(Network sif)
+	public void fromSif (Network sif)
 	{
-		transformNetwork (sif);
+		transformNetwork(sif);
 		createSbml();
 	}
 
@@ -365,7 +362,7 @@ public class QualExportHelper
 		return n.getId().startsWith("and");
 	}
 	
-	private void transformNetwork(Network sif)
+	private void transformNetwork (Network sif)
 	{
 		for (Node n : sif.getNodes())
 		{

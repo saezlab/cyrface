@@ -133,7 +133,7 @@ public class StartRServeTask extends AbstractTask implements ObservableTask {
 	 * This methods starts the Rserve.exe in windows.
 	 */
 	private void startRserve_win (String installPath) throws Exception {
-		String rsrvargs = "--no-save --slave";
+		String rsrvargs = "--vanilla";
 		String rargs = "--no-save --slave";
 
 		Process proc = Runtime.getRuntime().exec(installPath+" -e \"library(Rserve)" + ";Rserve(FALSE,args='" + rsrvargs + "')\" " + rargs);
@@ -221,7 +221,7 @@ public class StartRServeTask extends AbstractTask implements ObservableTask {
 	 * This method starts Rserve in an unix-based system.
 	 */
 	private boolean startRserve_unix() throws Exception {
-		String rsrvargs = "--vanilla"; // --no-save --slave
+		String rsrvargs = "--vanilla --no-save"; // --no-save --slave
 		String rargs = "--no-save --slave";
 		String cmd = getRInstallPath_unix();
 

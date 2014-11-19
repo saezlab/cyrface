@@ -1,7 +1,7 @@
 # Makefile 
 
 CYRFACE_NAME=cyrface
-CYRFACE_VERSION=2.0.0
+CYRFACE_VERSION=2.0.1
 
 default: mvn-build
 	cp target/$(CYRFACE_NAME)-$(CYRFACE_VERSION).jar /Users/emanuel/CytoscapeConfiguration/3/apps/installed/
