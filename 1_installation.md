@@ -3,7 +3,7 @@ layout: page
 title: Installation
 ---
 
-## Software requirements: Cytoscape v3.1 and R v3.x
+## **Software requirements: Cytoscape v3.1 and R v3.x**
 
 Cyrface can be installed from the Cytoscape App Manager:
 

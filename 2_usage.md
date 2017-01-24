@@ -3,7 +3,7 @@ layout: page
 title: Usage
 ---
 
-## Using Cyrface
+## **Using Cyrface**
 
 Cyrface tutorial - [pdf](/cyrface/public/Cyrface2.0Manual.pdf)
 
@@ -26,13 +26,13 @@ Then to get more detailed information about a specific command, for instance abo
 > help cyrface run
 
 
-## Implementation
+## **Implementation**
 
 Rserve and RCaller libraries are supported in Cyrface by the usage of RserveHandler and RCallerHandler Java classes, respectively. Both classes extend the abstract class RHandler that contains the signature of all the necessary methods to establish and maintain a connection with R. Figure 1 depicts the hierarchical structure of the Java classes responsible for handling the connection between Java and R. Moreover, it depicts the connection points between these two different environments.
 
 Developers interface with Cyrface through the RHandler abstract class. RHandler is extended by classes that integrate any java library to interact with R, e.g. RserveHandler class integrates Rserve library. Therefore, all future library implementations will have to extend RHandler (see figure below).
 
-<img src="/cyrface/public/Diagram.png" alt="Cyrface example" style="width:300px;height:600px;">
+<img src="/cyrface/public/Diagram.png" alt="Cyrface example" style="width:600px;height:300px;">
 
 In case the handlers supported by Cyrface are not adequate to the user needs, the users can implement their own handler by simply extending the RHandler class using any other library that fits best.
 
