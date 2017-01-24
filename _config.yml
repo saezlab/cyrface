@@ -12,20 +12,20 @@ kramdown:
 permalink:        pretty
 
 # Setup
-title:            Tool-Name
-tagline:          Tagline for website
-description:      "Short description of the tool, for the sidebar"
+title:            Cyrface
+tagline:          Bridging Cytoscape with R
+description:      "Cyrface establishes an interface between R and Cytoscape"
 #url:              https://github.com/saezlab/projectDocumentationTemplate
-baseurl:          /projectDocumentationTemplate/
-toollogo:         /projectDocumentationTemplate/tool_logo.png
+baseurl:          /cyrface/
+toollogo:         /cyrface/cyrface_logo.png
 
 author:
-  name:           'Author Name'
+  name:           'Emanuel Goncalves'
 
 paginate:         5
 
 # Custom vars
-version:          1.0.1
+version:          2.0.0
 
 github:
-  repo:           https://github.com/saezlab/projectDocumentationTemplate
+  repo:           https://github.com/saezlab/cyrface
