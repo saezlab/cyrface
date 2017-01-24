@@ -29,3 +29,5 @@ version:          2.0.0
 
 github:
   repo:           https://github.com/saezlab/cyrface
+
+appstore:         http://apps.cytoscape.org/apps/cyrface

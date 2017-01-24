@@ -5,4 +5,4 @@ title: Contact
 
 Cyrface was developed by Emanuel Goncalves.
 
-Currently, it is maintained by the saezlab. Questions and recommendations can be directed at <emanuel[at]ebi.ac.uk>.
+Currently, it is maintained by the saezlab. Contact <emanuel[at]ebi.ac.uk>
