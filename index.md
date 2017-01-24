@@ -9,8 +9,6 @@ Cyrface establishes an interface between R and Cytoscape by using different Java
 
 <img src="/cyrface/public/CyrfacePlotCommandLine.png" alt="Cyrface example" style="width:700px;height:600px;">
 
-# References
+# Reference
 
-+ [Goncalves et al. F1000Research, 2013](https://f1000research.com/articles/2-192/v1)
-
-> Gonçalves, E., Saez-Rodriguez, J., 2013. Cyrface: An interface from Cytoscape to R that provides a user interface to R packages. F1000Res. 2.
+[Gonçalves, E., Saez-Rodriguez, J., 2013. Cyrface: An interface from Cytoscape to R that provides a user interface to R packages. F1000Res. 2.](https://f1000research.com/articles/2-192/v1)

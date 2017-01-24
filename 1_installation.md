@@ -20,4 +20,4 @@ Move the Jar file into '~/CytoscapeConfiguration/3/apps/installed/' folder and s
 > sudo apt-get install libcairo2-dev
 > sudo apt-get install libxt-dev
 
-Cyrface is also available in [GitHub](https://github.com/EmanuelGoncalves/cyrface) and at [Cytoscape App Store](http://apps.cytoscape.org/apps/cyrface).
+Cyrface is also available in [GitHub](https://github.com/saezlab/cyrface) and at [Cytoscape App Store](http://apps.cytoscape.org/apps/cyrface).
