@@ -11,7 +11,7 @@ Cyrface establishes an interface between R and Cytoscape by using different Java
 
 <img src="/cyrface/public/CyrfacePlotCommandLine.png" alt="Cyrface example" style="width:700px;height:600px;">
 
-# How to cite
+## How to cite
 Please use this reference to cite Cyrface:
 
 Gonçalves, E., Mirlach, F., & Saez-Rodriguez, J. (2013). [Cyrface: An interface from Cytoscape to R that provides a user interface to R packages](https://f1000research.com/articles/2-192/v1). _F1000Research_, 2.
